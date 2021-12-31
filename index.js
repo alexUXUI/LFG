@@ -3,8 +3,8 @@ import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 // LIGHTS
-import { warmPointLightHelper, warmPointLight } from "./scene/warm-light.js";
-import { coolPointLightHelper, coolPointLight } from "./scene/cool-light.js";
+import { warmLightHelper, warmLight } from "./scene/lights/warm-light.js";
+import { coolLightHelper, coolLight } from "./scene/lights/cool-light.js";
 
 // CAMERA
 import { camera, rotateCameraAroundScene } from "./scene/camera.js";
@@ -33,10 +33,10 @@ scene.add(axesHelper);
 scene.add(gridHelper);
 
 // ADD LIGHTS TO SCENE
-scene.add(warmPointLight);
-scene.add(warmPointLightHelper);
-scene.add(coolPointLightHelper);
-scene.add(coolPointLight);
+scene.add(warmLight);
+scene.add(warmLightHelper);
+scene.add(coolLightHelper);
+scene.add(coolLight);
 
 // ADD COMPONENTS TO SEEN
 scene.add(icosahedron);
