@@ -1,7 +1,7 @@
 const path = require("path");
 
 const devServer = {
-  port: 8080,
+  port: 8082,
   hot: true, // enables HMR
   open: true,
 };
