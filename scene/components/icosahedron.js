@@ -1,9 +1,8 @@
 import * as THREE from "three";
 import { gui } from "../dat.gui.js";
+import { scene } from "../../index.js";
 
 const icosahedronFolder = gui.addFolder("Icosahedron");
-
-icosahedronFolder.open();
 
 const config = {
   xAngleFunction: "sin",
@@ -12,36 +11,32 @@ const config = {
   detail: 5,
 };
 
-gui.add(config, "xAngleFunction", {
-  sin: "sin",
-  cos: "cos",
-  tanh: "tanh",
-  tan: "tan",
-});
-
-gui.add(config, "yAngleFunction", {
-  sin: "sin",
-  cos: "cos",
-  tanh: "tanh",
-  tan: "tan",
-});
-
 // GEOMETRY
 const geometry = new THREE.IcosahedronBufferGeometry(
   config.size,
   config.detail
 );
 
-gui.add(config, "size", 0, 10).onChange((size) => {
-  geometry.setAttribute("size", size);
-  geometry.attributes.size.needsUpdate = true;
-});
+const angleOptions = {
+  sin: "sin",
+  cos: "cos",
+  tanh: "tanh",
+  tan: "tan",
+};
 
-gui.add(config, "detail", 0, 10).onChange((detail) => {
-  console.log(detail);
-  geometry.setAttribute("detail", detail);
-  geometry.attributes.detail.needsUpdate = true;
-});
+gui.add(config, "xAngleFunction", angleOptions);
+gui.add(config, "yAngleFunction", angleOptions);
+
+// gui.add(config, "size", 0, 10).onChange((size) => {
+//   // geometry.setAttribute("size", size);
+//   // geometry.attributes.size.needsUpdate = true;
+// });
+
+// gui.add(config, "detail", 0, 10).onChange((detail) => {
+//   console.log(detail);
+//   // geometry.setAttribute("detail", detail);
+//   // geometry.attributes.detail.needsUpdate = true;
+// });
 
 // MATERIAL
 var pinkMat = new THREE.MeshPhongMaterial({
@@ -81,7 +76,6 @@ const damping = 0.2;
 
 // ANIMATE
 export function animateIcosahedron() {
-  // console.log(config);
   const {
     geometry: { attributes },
   } = icosahedron;
@@ -114,3 +108,60 @@ export function animateIcosahedron() {
 }
 
 icosahedron.position.set(0, 0, 0);
+
+//////
+// 2
+//////
+
+function updateGroupGeometry(mesh, geometry) {
+  mesh.geometry.dispose();
+  mesh.geometry = new THREE.WireframeGeometry(geometry);
+  // these do not update nicely together if shared
+}
+
+const Icosahedron = {
+  Geometry: function (mesh) {
+    const data = {
+      radius: 10,
+      detail: 0,
+    };
+
+    function generateGeometry() {
+      updateGroupGeometry(
+        mesh,
+        new THREE.IcosahedronBufferGeometry(data.radius, data.detail)
+      );
+    }
+
+    const folder = gui.addFolder("THREE.IcosahedronGeometry");
+
+    folder.add(data, "radius", 1, 20).onChange(generateGeometry);
+    folder.add(data, "detail", 0, 5).step(1).onChange(generateGeometry);
+
+    return generateGeometry();
+  },
+};
+
+// const clonedIcosahedron = icosahedron.clone();
+
+// GEOMETRY
+const geometry2 = new THREE.IcosahedronBufferGeometry(
+  config.size,
+  config.detail
+);
+
+var pinkMat2 = new THREE.MeshPhongMaterial({
+  color: new THREE.Color("rgb(100,100,100)"),
+  emissive: new THREE.Color("rgb(10,10,10)"),
+  transparent: 1,
+  opacity: 1,
+  shininess: 100,
+});
+
+export const icosahedron2 = new THREE.Mesh(geometry, pinkMat);
+
+export const newIcosahedron = Icosahedron.Geometry(icosahedron2);
+console.log(newIcosahedron);
+// // // newIcosahedron.position.set(5, 5, 0);
+// icosahedron2.position.set(5, 5, 0);
+// scene.add(icosahedron2);
