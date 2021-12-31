@@ -1,18 +1,72 @@
 import * as THREE from "three";
+import { gui } from "../dat.gui.js";
 
-// ICOSAHEDRON
-const geometry = new THREE.IcosahedronBufferGeometry(10, 6);
+const icosahedronFolder = gui.addFolder("Icosahedron");
 
-var pinkMat = new THREE.MeshStandardMaterial({
-  color: new THREE.Color("rgb(226,35,213)"),
-  emissive: new THREE.Color("rgb(255,128,64)"),
-  transparent: 1,
-  opacity: 1,
+icosahedronFolder.open();
+
+const config = {
+  xAngleFunction: "sin",
+  yAngleFunction: "cos",
+  size: 2,
+  detail: 5,
+};
+
+gui.add(config, "xAngleFunction", {
+  sin: "sin",
+  cos: "cos",
+  tanh: "tanh",
+  tan: "tan",
 });
 
+gui.add(config, "yAngleFunction", {
+  sin: "sin",
+  cos: "cos",
+  tanh: "tanh",
+  tan: "tan",
+});
+
+// GEOMETRY
+const geometry = new THREE.IcosahedronBufferGeometry(
+  config.size,
+  config.detail
+);
+
+gui.add(config, "size", 0, 10).onChange((size) => {
+  geometry.setAttribute("size", size);
+  geometry.attributes.size.needsUpdate = true;
+});
+
+gui.add(config, "detail", 0, 10).onChange((detail) => {
+  console.log(detail);
+  geometry.setAttribute("detail", detail);
+  geometry.attributes.detail.needsUpdate = true;
+});
+
+// MATERIAL
+var pinkMat = new THREE.MeshPhongMaterial({
+  color: new THREE.Color("rgb(100,100,100)"),
+  emissive: new THREE.Color("rgb(10,10,10)"),
+  transparent: 1,
+  opacity: 1,
+  shininess: 100,
+});
+
+// ICOSAHEDRON (MESH = GEOMETRY + MATERIAL)
 export const icosahedron = new THREE.Mesh(geometry, pinkMat);
 
-// ATTRIBUTES
+/**
+ * ICOSAHEDRON ATTRIBUTES
+ * Used to get / organize the data associated with the icosahedron
+ * This data includes the vertices, and normals of the icosahedron
+ *
+ * Normals: The values in this attribute are used to find out what the direction
+ * is of each point of each triangle in an instance of buffer geometry
+ * https://dustinpfister.github.io/2021/06/08/threejs-buffer-geometry-attributes-normals/
+ *
+ * Postions: it is an array that holds all the values of each point in space
+ * https://dustinpfister.github.io/2021/06/07/threejs-buffer-geometry-attributes-position/
+ **/
 const count = icosahedron.geometry.attributes.position.count;
 
 const position = JSON.parse(
@@ -23,10 +77,11 @@ const normals = JSON.parse(
   JSON.stringify(icosahedron.geometry.attributes.normal.array)
 );
 
-const damping = 0.5;
+const damping = 0.2;
 
 // ANIMATE
 export function animateIcosahedron() {
+  // console.log(config);
   const {
     geometry: { attributes },
   } = icosahedron;
@@ -43,10 +98,10 @@ export function animateIcosahedron() {
 
     // calculate current vertex wave height
     const xangle = uX + now;
-    const xsin = Math.sin(xangle) * damping;
+    const xsin = Math[config.xAngleFunction](xangle) * damping;
 
     const yangle = uY + now;
-    const ycos = Math.cos(yangle) * damping;
+    const ycos = Math[config.yAngleFunction](yangle) * damping;
 
     // set new position
     attributes.position.setX(i, position[ix] + normals[ix] * (xsin + ycos));
@@ -58,4 +113,4 @@ export function animateIcosahedron() {
   attributes.position.needsUpdate = true;
 }
 
-icosahedron.position.set(0, 10, 0);
+icosahedron.position.set(0, 0, 0);
