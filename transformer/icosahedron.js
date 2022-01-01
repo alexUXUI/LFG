@@ -24,6 +24,7 @@ export function modulate(val, minVal, maxVal, outMin, outMax) {
 export const prepareIcosahedron = (frequencyData) => {
   // PREPARE AUDIO DATA
   const lowerHalfArray = frequencyData.slice(0, frequencyData.length / 2 - 1);
+
   const upperHalfArray = frequencyData.slice(
     frequencyData.length / 2 - 1,
     frequencyData.length - 1
@@ -40,4 +41,13 @@ export const prepareIcosahedron = (frequencyData) => {
   const lowerAvgFr = lowerAvg / lowerHalfArray.length;
   const upperMaxFr = upperMax / upperHalfArray.length;
   const upperAvgFr = upperAvg / upperHalfArray.length;
+
+  // console.log(lowerMax, lowerAvg);
+
+  return {
+    lowerHalfArray,
+    upperHalfArray,
+    lowerAvg,
+    upperAvg,
+  };
 };

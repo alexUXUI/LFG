@@ -7,7 +7,7 @@ export class AudioManager {
   constructor() {
     this.listener = new THREE.AudioListener();
     this.audio = new THREE.Audio(this.listener);
-    this.fftSize = 128;
+    this.fftSize = 2048;
     this.loader = new THREE.AudioLoader();
     this.loop = true;
     this.mediaElement = new Audio(file);

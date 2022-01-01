@@ -21,8 +21,8 @@ import {
   animateIcosahedron,
 } from "./scene/components/icosahedron.js";
 
-// AUDIO
-import { initAudio } from "./audio/audio.js";
+// DATA TRANSFORMERS
+import { prepareIcosahedron } from "./transformer/icosahedron.js";
 
 import file from "./audio/song.mp3";
 import { AudioManager } from "./audio/source.js";
@@ -72,6 +72,9 @@ document.addEventListener("keydown", (key) => {
         // console.log(avgFrequencyData);
 
         const frequencyData = analyser.getFrequencyData();
+
+        const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
+          prepareIcosahedron(frequencyData);
 
         coolLight.intensity = avgFrequencyData / 30;
 

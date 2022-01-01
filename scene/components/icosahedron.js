@@ -12,7 +12,12 @@ const config = {
 };
 
 // GEOMETRY
-const geometry = new THREE.IcosahedronBufferGeometry(
+// const geometry = new THREE.IcosahedronBufferGeometry(
+//   config.size,
+//   config.detail
+// );
+
+const geometry = new THREE.DodecahedronBufferGeometry(
   config.size,
   config.detail
 );
