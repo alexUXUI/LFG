@@ -32,10 +32,10 @@ export const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
 // ADD HELPERS TO SCENE
-scene.add(axesHelper);
-scene.add(warmLightHelper);
-scene.add(coolLightHelper);
-scene.add(gridHelper);
+// scene.add(axesHelper);
+// scene.add(warmLightHelper);
+// scene.add(coolLightHelper);
+// scene.add(gridHelper);
 
 // ADD LIGHTS TO SCENE
 scene.add(warmLight);

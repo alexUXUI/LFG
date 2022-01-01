@@ -10,13 +10,14 @@ const config = {
   yAngleFunction: "cos",
   size: 10,
   detail: 10,
-  geometry: "DodecahedronBufferGeometry",
+  // geometry: "DodecahedronBufferGeometry",
+  geometry: "IcosahedronBufferGeometry",
 };
 
 // GEOMETRY
 const geometry = new THREE[config.geometry](config.size, config.detail);
 
-// const geometry = new THREE.DodecahedronBufferGeometry(
+// const geometry = new THREE.IcosahedronBufferGeometry(
 //   config.size,
 //   config.detail
 // );
