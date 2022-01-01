@@ -5,11 +5,11 @@ const audioConfig = {
   fftSize: 2048,
 };
 
-gui
-  .add(audioConfig, "fftSize", [32, 64, 128, 256, 512, 1024, 2048])
-  .onChange((fftSize) => {
-    audioManager.setFFTSize(fftSize);
-  });
+// gui
+//   .add(audioConfig, "fftSize", [32, 64, 128, 256, 512, 1024, 2048])
+//   .onChange((fftSize) => {
+//     audioManager.setFFTSize(fftSize);
+//   });
 
 export class AudioManager {
   constructor(audio, type) {

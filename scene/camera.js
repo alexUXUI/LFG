@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { gui } from "./dat.gui";
 
-const config = gui.addFolder("Camera");
+// const config = gui.addFolder("Camera");
 // config.open();
 
 // Camera defaults configs
@@ -45,35 +45,35 @@ export const rotateCameraAroundScene = (focalPoint, camera) => {
   camera.lookAt(focalPoint);
 };
 
-// Expose Camera Configs through Dat.GUI
-config.add(cameraConfig, "fieldOfView", 2, 200).onChange((value) => {
-  camera.fov = value;
-  camera.updateProjectionMatrix();
-});
+// // Expose Camera Configs through Dat.GUI
+// config.add(cameraConfig, "fieldOfView", 2, 200).onChange((value) => {
+//   camera.fov = value;
+//   camera.updateProjectionMatrix();
+// });
 
-config.add(cameraConfig, "aspectRatio", 0.1, 10).onChange((value) => {
-  camera.aspect = value;
-  camera.updateProjectionMatrix();
-});
+// config.add(cameraConfig, "aspectRatio", 0.1, 10).onChange((value) => {
+//   camera.aspect = value;
+//   camera.updateProjectionMatrix();
+// });
 
-config.add(cameraConfig, "near", 0.1, 100).onChange((value) => {
-  camera.near = value;
-  camera.updateProjectionMatrix();
-});
+// config.add(cameraConfig, "near", 0.1, 100).onChange((value) => {
+//   camera.near = value;
+//   camera.updateProjectionMatrix();
+// });
 
-config.add(cameraConfig, "far", 0.1, 100).onChange((value) => {
-  camera.far = value;
-  camera.updateProjectionMatrix();
-});
+// config.add(cameraConfig, "far", 0.1, 100).onChange((value) => {
+//   camera.far = value;
+//   camera.updateProjectionMatrix();
+// });
 
-config.add(cameraConfig, "x", -100, 100).onChange((value) => {
-  camera.position.x = value;
-});
+// config.add(cameraConfig, "x", -100, 100).onChange((value) => {
+//   camera.position.x = value;
+// });
 
-config.add(cameraConfig, "y", -100, 100).onChange((value) => {
-  camera.position.y = value;
-});
+// config.add(cameraConfig, "y", -100, 100).onChange((value) => {
+//   camera.position.y = value;
+// });
 
-config.add(cameraConfig, "z", -100, 100).onChange((value) => {
-  camera.position.z = value;
-});
+// config.add(cameraConfig, "z", -100, 100).onChange((value) => {
+//   camera.position.z = value;
+// });

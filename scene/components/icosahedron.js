@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { gui } from "../dat.gui.js";
+// import { gui } from "../dat.gui.js";
 import { scene } from "../../index.js";
 import { camera } from "../camera.js";
 
-const icosahedronFolder = gui.addFolder("Icosahedron");
+// const icosahedronFolder = gui.addFolder("Icosahedron");
 
 const config = {
   xAngleFunction: "sin",
@@ -29,8 +29,8 @@ const angleOptions = {
   tan: "tan",
 };
 
-gui.add(config, "xAngleFunction", angleOptions);
-gui.add(config, "yAngleFunction", angleOptions);
+// gui.add(config, "xAngleFunction", angleOptions);
+// gui.add(config, "yAngleFunction", angleOptions);
 
 // gui.add(config, "size", 0, 10).onChange((size) => {
 //   // geometry.setAttribute("size", size);
@@ -56,23 +56,23 @@ var pinkMat = new THREE.MeshPhongMaterial({
 // ICOSAHEDRON (MESH = GEOMETRY + MATERIAL)
 export const icosahedron = new THREE.Mesh(geometry, pinkMat);
 
-gui
-  .add(config, "geometry", [
-    "IcosahedronBufferGeometry",
-    "DodecahedronBufferGeometry",
-  ])
-  .onChange((value) => {
-    const geometryToMove = icosahedron.geometry;
-    scene.remove(icosahedron);
+// gui
+//   .add(config, "geometry", [
+//     "IcosahedronBufferGeometry",
+//     "DodecahedronBufferGeometry",
+//   ])
+//   .onChange((value) => {
+//     const geometryToMove = icosahedron.geometry;
+//     scene.remove(icosahedron);
 
-    var mesh2 = new THREE.Mesh();
-    mesh2.geometry = geometryToMove;
-    scene.add(mesh2);
+//     var mesh2 = new THREE.Mesh();
+//     mesh2.geometry = geometryToMove;
+//     scene.add(mesh2);
 
-    mesh2.material.needsUpdate = true;
+//     mesh2.material.needsUpdate = true;
 
-    // renderer.render(scene, camera);
-  });
+//     // renderer.render(scene, camera);
+//   });
 /**
  * ICOSAHEDRON ATTRIBUTES
  * Used to get / organize the data associated with the icosahedron
