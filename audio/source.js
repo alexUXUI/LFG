@@ -15,13 +15,14 @@ gui
 let playing = false;
 
 export class AudioManager {
-  constructor() {
+  constructor(audio) {
     this.listener = new THREE.AudioListener();
     this.audio = new THREE.Audio(this.listener);
     this.fftSize = audioConfig.fftSize;
     this.loader = new THREE.AudioLoader();
     this.loop = true;
-    this.mediaElement = new Audio(file);
+    this.mediaElement = audio;
+    this.incomingAugio = audio;
   }
 
   setFFTSize(fftSize) {
@@ -42,11 +43,11 @@ export class AudioManager {
 
   analyser = () => {
     if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
-      this.loader.load(file, function (buffer) {
-        // this.audio.setBuffer(buffer);
-        // this.audio.setLoop(this.loop);
-        // this.audio.playbackRate(0.2);
-        // this.audio.play();
+      this.loader.load(this.incomingAugio, function (buffer) {
+        this.audio.setBuffer(buffer);
+        this.audio.setLoop(this.loop);
+        this.audio.playbackRate(0.2);
+        this.audio.play();
       });
     } else {
       this.mediaElement.play();
@@ -58,5 +59,3 @@ export class AudioManager {
     return analyser;
   };
 }
-
-export const audioManager = new AudioManager();

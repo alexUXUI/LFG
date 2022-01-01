@@ -23,8 +23,8 @@ import {
 // DATA TRANSFORMERS
 import { prepareIcosahedron } from "./transformer/icosahedron.js";
 
-import file from "./audio/song.mp3";
-import { audioManager } from "./audio/source.js";
+// AUDIO
+import { AudioManager } from "./audio/source.js";
 
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
@@ -39,62 +39,75 @@ scene.add(gridHelper);
 
 // ADD LIGHTS TO SCENE
 scene.add(warmLight);
-
 scene.add(coolLight);
 
 // ADD COMPONENTS TO SEEN
 scene.add(icosahedron);
 
+// Is the scene playing?
 let playing = false;
 
 // Reference to the animation frame callback
 // Allows us to stop and start the animation frame callback
 let frameId;
 
-document.addEventListener("keydown", (key) => {
-  if (key.key === " ") {
-    if (!playing) {
-      audioManager.play();
-      const analyser = audioManager.analyser();
+// Only start the process when the user clicks the spacebar
+// document.addEventListener("keydown", (key) => {
 
-      // ANIMATION LOOP
-      function animate() {
-        // AUDIO DATA
-        const avgFrequencyData = analyser.getAverageFrequency();
-        const frequencyData = analyser.getFrequencyData();
+var file = document.getElementById("thefile");
+var audio = document.getElementById("audio");
 
-        // PROCESS AUDIO DATA
-        const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
-          prepareIcosahedron(frequencyData);
+file.onchange = function () {
+  var files = this.files;
+  audio.src = URL.createObjectURL(files[0]);
 
-        // run the loop
-        frameId = requestAnimationFrame(animate);
+  console.log(audio);
 
-        // adjusts the intensity of the light based on the average frequency
-        coolLight.intensity = avgFrequencyData / 30;
-        warmLight.intensity = avgFrequencyData / 30;
+  // if (key.key === " ") {
+  if (audio.paused) {
+    const audioManager = new AudioManager(audio);
+    // AudioManager.play();
+    const analyser = audioManager.analyser();
 
-        // Animates the icosahedron
-        animateIcosahedron(avgFrequencyData, frequencyData);
+    // ANIMATION LOOP
+    function animate() {
+      // AUDIO DATA
+      const avgFrequencyData = analyser.getAverageFrequency();
+      const frequencyData = analyser.getFrequencyData();
 
-        // Rotates the camera around the scene
-        rotateCameraAroundScene(scene.position, camera);
+      // PROCESS AUDIO DATA
+      const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
+        prepareIcosahedron(frequencyData);
 
-        // renders the scene
-        renderer.render(scene, camera);
-      }
+      // run the loop
+      frameId = requestAnimationFrame(animate);
 
-      // RUN THE ANIMATION LOOP
-      animate();
+      // adjusts the intensity of the light based on the average frequency
+      coolLight.intensity = avgFrequencyData / 30;
+      warmLight.intensity = avgFrequencyData / 30;
 
-      playing = true;
-    } else {
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
-      cancelAnimationFrame(frameId);
-      playing = false;
-      audioManager.pause();
+      // Animates the icosahedron
+      animateIcosahedron(avgFrequencyData, frequencyData);
+
+      // Rotates the camera around the scene
+      rotateCameraAroundScene(scene.position, camera);
+
+      // renders the scene
+      renderer.render(scene, camera);
     }
+
+    // RUN THE ANIMATION LOOP
+    animate();
+
+    playing = true;
+  } else {
+    while (scene.children.length > 0) {
+      scene.remove(scene.children[0]);
+    }
+    cancelAnimationFrame(frameId);
+    playing = false;
+    AudioManager.pause();
   }
-});
+  // }
+};
+// });
