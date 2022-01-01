@@ -56,52 +56,42 @@ let frameId;
 
 const player = document.getElementById("audio");
 
-const handleSuccess = function (stream) {
-  console.log("handling");
-  if (window.URL) {
-    console.log("srcObject");
-    player.srcObject = stream;
-
-    // const context = new AudioContext();
-    // const source = context.createMediaStreamSource(stream);
-    // source.connect(analyser);
-
-    // var analyser = context.createAnalyser();
-
-    // analyser.fftSize = 2048;
-    // var bufferLength = analyser.frequencyBinCount;
-    // var dataArray = new Uint8Array(bufferLength);
-    ///
-
-    const context = new AudioContext();
-    const src = context.createMediaStreamSource(stream);
-    const analyser = context.createAnalyser();
-
-    src.connect(analyser);
-    analyser.connect(context.destination);
-
-    analyser.fftSize = 2048;
-
-    const bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
-
-    const dataArray = new Uint8Array(bufferLength);
-  } else {
-    console.log("src");
-    player.src = stream;
-  }
-};
-
-navigator.mediaDevices
-  .getUserMedia({ audio: true, video: false })
-  .then(handleSuccess);
+let microphoneMode = true;
 
 var file = document.getElementById("thefile");
 var audio = document.getElementById("audio");
 
-file.onchange = function () {
-  var files = this.files;
-  audio.src = URL.createObjectURL(files[0]);
+if (microphoneMode) {
+  navigator.mediaDevices
+    .getUserMedia({ audio: true, video: false })
+    .then(function (stream) {
+      console.log("handling");
+      if (window.URL) {
+        console.log("srcObject");
+        player.srcObject = stream;
+
+        const context = new AudioContext();
+        const src = context.createMediaStreamSource(stream);
+        const analyser = context.createAnalyser();
+
+        src.connect(analyser);
+        analyser.connect(context.destination);
+
+        analyser.fftSize = 2048;
+
+        const bufferLength = analyser.frequencyBinCount;
+        console.log(bufferLength);
+
+        const dataArray = new Uint8Array(bufferLength);
+      } else {
+        console.log("src");
+        player.src = stream;
+      }
+    })
+    .catch((err) => {
+      console.error("could not connect to mic");
+      console.log(err);
+    });
 
   console.log(audio);
 
@@ -150,6 +140,57 @@ file.onchange = function () {
     playing = false;
     AudioManager.pause();
   }
-  // }
-};
-// });
+} else {
+  file.onchange = function () {
+    var files = this.files;
+    audio.src = URL.createObjectURL(files[0]);
+
+    console.log(audio);
+
+    // if (key.key === " ") {
+    if (audio.paused) {
+      const audioManager = new AudioManager(audio);
+      // AudioManager.play();
+      const analyser = audioManager.analyser();
+
+      // ANIMATION LOOP
+      function animate() {
+        // AUDIO DATA
+        const avgFrequencyData = analyser.getAverageFrequency();
+        const frequencyData = analyser.getFrequencyData();
+
+        // PROCESS AUDIO DATA
+        const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
+          prepareIcosahedron(frequencyData);
+
+        // run the loop
+        frameId = requestAnimationFrame(animate);
+
+        // adjusts the intensity of the light based on the average frequency
+        coolLight.intensity = avgFrequencyData / 30;
+        warmLight.intensity = avgFrequencyData / 30;
+
+        // Animates the icosahedron
+        animateIcosahedron(avgFrequencyData, frequencyData);
+
+        // Rotates the camera around the scene
+        rotateCameraAroundScene(scene.position, camera);
+
+        // renders the scene
+        renderer.render(scene, camera);
+      }
+
+      // RUN THE ANIMATION LOOP
+      animate();
+
+      playing = true;
+    } else {
+      while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+      }
+      cancelAnimationFrame(frameId);
+      playing = false;
+      AudioManager.pause();
+    }
+  };
+}
