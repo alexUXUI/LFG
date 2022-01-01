@@ -13,9 +13,6 @@ p {
 #content {
   display: flex;
   width: 400px;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .custom-file-upload {

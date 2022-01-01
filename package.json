@@ -5,6 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "dat.gui": "^0.7.7",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "simplex-noise": "^3.0.0",
     "three": "^0.136.0",
     "webpack": "^5.37.0",
@@ -14,7 +16,12 @@
     "dev": "webpack serve --mode=development"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.7",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.3",
     "file-loader": "^6.2.0",
+    "style-loader": "^3.3.1",
     "webpack-dev-server": "^3.11.2"
   }
 }
