@@ -15,7 +15,7 @@ module.exports = {
   },
   resolve: {
     modules: ["node_modules", "./src"],
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", ".css"],
   },
   module: {
     rules: [
@@ -28,15 +28,10 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
       },
+      // add support for .css files
       {
         test: /\.css$/,
-        use: {
-          loader: "style-loader",
-          options: {
-            modules: true,
-            localIdentName: "[name]__[local]___[hash:base64:5]",
-          },
-        },
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

@@ -116,7 +116,7 @@ export const runViz = (playing) => {
         const audioManager = new AudioManager(audio);
         const analyser = audioManager.analyser();
 
-        audioManager.toggleMediaElement();
+        audioManager.play();
 
         // ANIMATION LOOP
         function animate() {

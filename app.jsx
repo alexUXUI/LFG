@@ -1,5 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { motion } from "framer-motion";
+
+import "./start-screen.css";
 
 const App = () => {
   const [playing, setPlaying] = React.useState(false);
@@ -42,11 +45,21 @@ const App = () => {
   };
 
   return (
-    <div>
-      <button onClick={() => setPlaying(!playing)}>
-        {playing ? "Stop" : "Start"}
-      </button>
-      {playing ? <AudioControls /> : null}
+    <div id="screen--start">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ rotate: 0, scale: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+        }}
+      >
+        <button onClick={() => setPlaying(!playing)}>
+          {playing ? "Stop" : "Start"}
+        </button>
+        {playing ? <AudioControls /> : null}
+      </motion.div>
     </div>
   );
 };
