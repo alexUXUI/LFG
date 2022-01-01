@@ -114,8 +114,9 @@ export const runViz = (playing) => {
         audio.src = URL.createObjectURL(files[0]);
 
         const audioManager = new AudioManager(audio);
-        audioManager.play();
         const analyser = audioManager.analyser();
+
+        audioManager.toggleMediaElement();
 
         // ANIMATION LOOP
         function animate() {

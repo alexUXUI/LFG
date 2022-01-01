@@ -38,38 +38,42 @@ export class AudioManager {
     }
   }
 
-  analyser = (type) => {
-    if (!type || type !== "mic") {
-      try {
-        if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
-          this.loader.load(this.incomingAudio, function (buffer) {
-            this.audio.setBuffer(buffer);
-            this.audio.setLoop(this.loop);
-            this.audio.playbackRate(0.2);
-            this.audio.play();
-          });
-        } else {
-          // this.mediaElement.play();
-          this.audio.setMediaElementSource(this.mediaElement);
-        }
-        const analyser = new THREE.AudioAnalyser(this.audio, this.fftSize);
-
-        return analyser;
-      } catch (e) {
-        console.log(e);
-
-        return "could not make analyser";
-      }
+  toggleAudioElement() {
+    if (this.audio.paused) {
+      this.audio.play();
     } else {
-      const analyser = new THREE.AudioAnalyser(this.audio, this.fftSize);
-      return analyser;
+      this.audio.pause();
     }
-  };
+  }
 
-  voice = () => {
-    // source audio from microphone and use the mediaElement
-    this.mediaElement.play();
-    this.audio.setMediaElementSource(this.mediaElement);
+  toggleMediaElement() {
+    if (this.mediaElement.paused) {
+      this.mediaElement.play();
+    } else {
+      this.mediaElement.pause();
+    }
+  }
+
+  analyser = () => {
+    const isIOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    try {
+      if (!isIOS) {
+        this.audio.setMediaElementSource(this.mediaElement);
+      } else {
+        this.loader.load(this.incomingAudio, function (buffer) {
+          this.audio.setBuffer(buffer);
+          this.audio.setLoop(this.loop);
+          this.audio.playbackRate(0.2);
+          this.audio.play();
+        });
+      }
+
+      const analyser = new THREE.AudioAnalyser(this.audio, this.fftSize);
+
+      return analyser;
+    } catch (e) {
+      return "could not create analyser";
+    }
   };
 }
 

@@ -1,16 +1,5 @@
 import * as THREE from "three";
 
-// RENDERER
-// export const renderer = new THREE.WebGLRenderer();
-// renderer.setSize(window.innerWidth, window.innerHeight);
-// document.body.appendChild(renderer.domElement);
-
-// export const newRenderer = () => {
-//   export const renderer = new THREE.WebGLRenderer();
-//   renderer.setSize(window.innerWidth, window.innerHeight);
-//   document.body.appendChild(renderer.domElement);
-// };
-
 export class RendererManager {
   constructor() {
     this.createRenderer();
@@ -35,8 +24,8 @@ export class RendererManager {
     this.renderer = undefined;
   }
 
-  createOrDestroyRenderer() {
-    if (this.renderer) {
+  createOrDestroyRenderer(isPlaying) {
+    if (isPlaying) {
       this.destroyRenderer();
     } else {
       this.createRenderer();
@@ -45,10 +34,8 @@ export class RendererManager {
 
   getOrCreateRenderer() {
     if (this.renderer) {
-      console.log("Renderer already exists");
       return this.renderer;
     } else {
-      console.log("Renderer not found. Creating new renderer.");
       this.createRenderer();
       return this.renderer;
     }
@@ -56,10 +43,8 @@ export class RendererManager {
 
   getOrCreateDOMElement() {
     if (this.renderer) {
-      console.log("Renderer already exists");
       return this.renderer.domElement;
     } else {
-      console.log("Renderer not found. Creating new renderer.");
       this.createRenderer();
       return this.renderer.domElement;
     }
