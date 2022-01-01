@@ -84,10 +84,10 @@ export class MicrophoneManager {
     // new audio analyzer
     this.analyser = this.context.createAnalyser();
     this.analyser.smoothingTimeConstant = 0.2;
-    this.analyser.fftSize = 128;
+    this.analyser.fftSize = 2048;
 
     // connect the context to the processor
-    this.processor = this.context.createScriptProcessor(1024, 1, 1);
+    this.processor = this.context.createScriptProcessor(2048, 1, 1);
 
     // create audio source from stream
     this.source = this.context.createMediaStreamSource(stream);
@@ -101,27 +101,20 @@ export class MicrophoneManager {
     // connect the processor to the destination
     this.processor.connect(this.context.destination);
 
-    this.processor.onaudioprocess = function (e) {
-      // // Do something with the data, e.g. convert it to WAV
-      // // console.log(e.inputBuffer);
-      // let spectrum = new Uint8Array(this.analyser.frequencyBinCount);
-      // // getByteFrequencyData returns amplitude for each bin
-      // this.analyser.getByteFrequencyData(spectrum);
-      // // getByteTimeDomainData gets volumes over the sample time
-      // // analyser.getByteTimeDomainData(self.spectrum);
-      // console.log(spectrum);
-      // this.processAudio(this.analyser);
-    };
-
     this.processor.onaudioprocess = (e) => this.processAudio(e, this.analyser);
+
+    this.spectrum = new Uint8Array(this.analyser.frequencyBinCount);
   }
 
   processAudio(e, analyser) {
-    let spectrum = new Uint8Array(this.analyser.frequencyBinCount);
     // getByteFrequencyData returns amplitude for each bin
-    analyser.getByteFrequencyData(spectrum);
+    // analyser.getByteFrequencyData(spectrum);
     // getByteTimeDomainData gets volumes over the sample time
-    // analyser.getByteTimeDomainData(self.spectrum);
-    console.log(spectrum);
+    this.analyser.getByteTimeDomainData(this.spectrum);
+    // console.log(this.spectrum);
+  }
+
+  makeProcessor() {
+    return this.processor;
   }
 }

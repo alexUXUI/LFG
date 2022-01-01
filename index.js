@@ -32,10 +32,14 @@ export const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
 // ADD HELPERS TO SCENE
-// scene.add(axesHelper);
-// scene.add(warmLightHelper);
-// scene.add(coolLightHelper);
-// scene.add(gridHelper);
+const allHelpers = (scene) => {
+  scene.add(axesHelper);
+  scene.add(warmLightHelper);
+  scene.add(coolLightHelper);
+  scene.add(gridHelper);
+};
+
+allHelpers(scene);
 
 // ADD LIGHTS TO SCENE
 scene.add(warmLight);
@@ -54,7 +58,7 @@ let frameId;
 // Only start the process when the user clicks the spacebar
 // document.addEventListener("keydown", (key) => {
 
-let microphoneMode = true;
+let microphoneMode = false;
 
 var file = document.getElementById("thefile");
 var audio = document.getElementById("audio");
@@ -75,46 +79,12 @@ if (microphoneMode) {
     })
     .then(function (stream) {
       console.log("handling");
-      // if (window.URL) {
-      //   console.log("srcObject");
-
-      //   // new audio context
-      //   const context = new AudioContext();
-
-      //   // new audio analyzer
-      //   const analyser = context.createAnalyser();
-      //   analyser.smoothingTimeConstant = 0.2;
-      //   analyser.fftSize = 128;
-
-      //   // connect the context to the processor
-      //   const processor = context.createScriptProcessor(1024, 1, 1);
-
-      //   // create audio source from stream
-      //   const source = context.createMediaStreamSource(stream);
-
-      //   // connect the source to the analyser
-      //   source.connect(analyser);
-
-      //   // connect the analyser to the processor
-      //   analyser.connect(processor);
-
-      //   // connect the processor to the destination
-      //   processor.connect(context.destination);
-
-      //   processor.onaudioprocess = function (e) {
-      //     // Do something with the data, e.g. convert it to WAV
-      //     // console.log(e.inputBuffer);
-      //     let spectrum = new Uint8Array(analyser.frequencyBinCount);
-      //     // getByteFrequencyData returns amplitude for each bin
-      //     analyser.getByteFrequencyData(spectrum);
-      //     // getByteTimeDomainData gets volumes over the sample time
-      //     // analyser.getByteTimeDomainData(self.spectrum);
-      //     // console.log(spectrum);
-      //   };
-      // }
 
       const microphone = new MicrophoneManager(stream);
-      microphone.processAudio();
+      // microphone.processAudio();
+
+      // const processor = microphone.makeProcessor();
+      // console.log(processor);
     })
     .catch((err) => {
       console.error("could not connect to mic");
