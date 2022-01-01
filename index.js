@@ -24,7 +24,7 @@ import {
 import { prepareIcosahedron } from "./transformer/icosahedron.js";
 
 // AUDIO
-import { AudioManager } from "./scene/audio.js";
+import { AudioManager, MicrophoneManager } from "./scene/audio.js";
 
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
@@ -54,7 +54,7 @@ let frameId;
 // Only start the process when the user clicks the spacebar
 // document.addEventListener("keydown", (key) => {
 
-let microphoneMode = false;
+let microphoneMode = true;
 
 var file = document.getElementById("thefile");
 var audio = document.getElementById("audio");
@@ -75,46 +75,46 @@ if (microphoneMode) {
     })
     .then(function (stream) {
       console.log("handling");
-      if (window.URL) {
-        console.log("srcObject");
+      // if (window.URL) {
+      //   console.log("srcObject");
 
-        const context = new AudioContext();
-        const source = context.createMediaStreamSource(stream);
-        const processor = context.createScriptProcessor(1024, 1, 1);
+      //   // new audio context
+      //   const context = new AudioContext();
 
-        source.connect(processor);
-        processor.connect(context.destination);
+      //   // new audio analyzer
+      //   const analyser = context.createAnalyser();
+      //   analyser.smoothingTimeConstant = 0.2;
+      //   analyser.fftSize = 128;
 
-        var analyser = context.createAnalyser();
-        analyser.smoothingTimeConstant = 0.2;
-        analyser.fftSize = 128;
+      //   // connect the context to the processor
+      //   const processor = context.createScriptProcessor(1024, 1, 1);
 
-        const listener = new THREE.AudioListener();
-        const audio = new THREE.Audio(listener);
+      //   // create audio source from stream
+      //   const source = context.createMediaStreamSource(stream);
 
-        processor.onaudioprocess = function (e) {
-          // Do something with the data, e.g. convert it to WAV
-          // console.log(e.inputBuffer);
-          let spectrum = new Uint8Array(analyser.frequencyBinCount);
-          // getByteFrequencyData returns amplitude for each bin
-          analyser.getByteFrequencyData(spectrum);
-          // getByteTimeDomainData gets volumes over the sample time
-          // analyser.getByteTimeDomainData(self.spectrum);
-          console.log(spectrum);
-        };
+      //   // connect the source to the analyser
+      //   source.connect(analyser);
 
-        var input = context.createMediaStreamSource(stream);
-        input.connect(analyser);
-        analyser.connect(processor);
-        processor.connect(context.destination);
+      //   // connect the analyser to the processor
+      //   analyser.connect(processor);
 
-        //   // ANIMATION LOOP
+      //   // connect the processor to the destination
+      //   processor.connect(context.destination);
 
-        //   playing = true;
-        // } else {
-        //   console.log("src");
-        //   player.src = stream;
-      }
+      //   processor.onaudioprocess = function (e) {
+      //     // Do something with the data, e.g. convert it to WAV
+      //     // console.log(e.inputBuffer);
+      //     let spectrum = new Uint8Array(analyser.frequencyBinCount);
+      //     // getByteFrequencyData returns amplitude for each bin
+      //     analyser.getByteFrequencyData(spectrum);
+      //     // getByteTimeDomainData gets volumes over the sample time
+      //     // analyser.getByteTimeDomainData(self.spectrum);
+      //     // console.log(spectrum);
+      //   };
+      // }
+
+      const microphone = new MicrophoneManager(stream);
+      microphone.processAudio();
     })
     .catch((err) => {
       console.error("could not connect to mic");

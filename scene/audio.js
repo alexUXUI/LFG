@@ -17,29 +17,6 @@ export class AudioManager {
     this.audio = new THREE.Audio(this.listener);
     this.fftSize = audioConfig.fftSize;
     if (type === "mic") {
-      // this.mediaElement = this.audio;
-      // this.mediaElement.srcObject = this.audio.srcObject;
-      // this.mediaElement.play();
-
-      let stream = audio;
-
-      const tracks = stream.getAudioTracks();
-
-      console.log(tracks);
-
-      console.log("mic!!!!");
-
-      console.log(typeof audio);
-      console.log(audio);
-
-      // const listener = new THREE.AudioListener();
-      // const analyser = new THREE.AudioAnalyser(, this.fftSize);
-      // audioContext.createMediaStreamSource(stream);
-      // const _audio = new THREE.Audio(listener);
-      // const context = listener.context;
-      // const source = context.createMediaElementSource(_audio);
-
-      // audio.setNodeSource(source);
     } else {
       this.loader = new THREE.AudioLoader();
       this.loop = true;
@@ -97,4 +74,54 @@ export class AudioManager {
     this.mediaElement.play();
     this.audio.setMediaElementSource(this.mediaElement);
   };
+}
+
+export class MicrophoneManager {
+  constructor(stream) {
+    // new audio context
+    this.context = new AudioContext();
+
+    // new audio analyzer
+    this.analyser = this.context.createAnalyser();
+    this.analyser.smoothingTimeConstant = 0.2;
+    this.analyser.fftSize = 128;
+
+    // connect the context to the processor
+    this.processor = this.context.createScriptProcessor(1024, 1, 1);
+
+    // create audio source from stream
+    this.source = this.context.createMediaStreamSource(stream);
+
+    // connect the source to the analyser
+    this.source.connect(this.analyser);
+
+    // connect the analyser to the processor
+    this.analyser.connect(this.processor);
+
+    // connect the processor to the destination
+    this.processor.connect(this.context.destination);
+
+    this.processor.onaudioprocess = function (e) {
+      // // Do something with the data, e.g. convert it to WAV
+      // // console.log(e.inputBuffer);
+      // let spectrum = new Uint8Array(this.analyser.frequencyBinCount);
+      // // getByteFrequencyData returns amplitude for each bin
+      // this.analyser.getByteFrequencyData(spectrum);
+      // // getByteTimeDomainData gets volumes over the sample time
+      // // analyser.getByteTimeDomainData(self.spectrum);
+      // console.log(spectrum);
+      // this.processAudio(this.analyser);
+    };
+
+    this.processor.onaudioprocess = (e) => this.processAudio(e, this.analyser);
+  }
+
+  processAudio(e, analyser) {
+    let spectrum = new Uint8Array(this.analyser.frequencyBinCount);
+    // getByteFrequencyData returns amplitude for each bin
+    analyser.getByteFrequencyData(spectrum);
+    // getByteTimeDomainData gets volumes over the sample time
+    // analyser.getByteTimeDomainData(self.spectrum);
+    console.log(spectrum);
+  }
 }
