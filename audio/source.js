@@ -43,8 +43,9 @@ export class AudioManager {
   analyser = () => {
     if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
       this.loader.load(file, function (buffer) {
-        this.audio.setBuffer(buffer);
-        sound.setLoop(this.loop);
+        // this.audio.setBuffer(buffer);
+        // this.audio.setLoop(this.loop);
+        // this.audio.playbackRate(0.2);
         // this.audio.play();
       });
     } else {

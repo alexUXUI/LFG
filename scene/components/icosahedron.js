@@ -10,7 +10,7 @@ const config = {
   yAngleFunction: "cos",
   size: 10,
   detail: 10,
-  geometry: "IcosahedronBufferGeometry",
+  geometry: "DodecahedronBufferGeometry",
 };
 
 // GEOMETRY
