@@ -13,7 +13,7 @@ export class AudioManager {
     this.mediaElement = new Audio(file);
   }
 
-  sourceAudio = () => {
+  analyser = () => {
     if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
       this.loader.load(file, function (buffer) {
         this.audio.setBuffer(buffer);

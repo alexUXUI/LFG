@@ -59,24 +59,24 @@ window.addEventListener("click", () => {
     // const analyser = sourceAudio();
 
     const audioManager = new AudioManager();
-
-    const analyser = audioManager.sourceAudio();
-
-    console.log(analyser);
+    const analyser = audioManager.analyser();
 
     // ANIMATION LOOP
     function animate() {
-      // get the average frequency of the sound
-      const data1 = analyser.getAverageFrequency();
-      const data2 = analyser.getFrequencyData();
+      // Derive the frequency data from the current audio source
+      // const data1 = analyser.getAverageFrequency();
+      // const data2 = analyser.getFrequencyData();
 
-      console.log(data2);
-
-      // console.log(analyser);
-
+      // run the loop
       frameId = requestAnimationFrame(animate);
+
+      // Animates the icosahedron
       animateIcosahedron();
+
+      // Rotates the camera around the scene
       rotateCameraAroundScene(scene.position, camera);
+
+      // renders the scene
       renderer.render(scene, camera);
     }
 
