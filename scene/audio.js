@@ -58,6 +58,7 @@ export class AudioManager {
     const isIOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
     try {
       if (!isIOS) {
+        // this.mediaElement.play();
         this.audio.setMediaElementSource(this.mediaElement);
       } else {
         this.loader.load(this.incomingAudio, function (buffer) {

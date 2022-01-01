@@ -16,7 +16,8 @@ export class RendererManager {
   }
 
   appendRendererToDOM() {
-    document.body.appendChild(this.renderer.domElement);
+    const container = document.getElementById("screen--start");
+    container.appendChild(this.renderer.domElement);
   }
 
   destroyRenderer() {

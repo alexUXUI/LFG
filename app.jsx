@@ -25,7 +25,7 @@ const App = () => {
 
   const AudioControls = () => {
     return (
-      <div>
+      <div className="audioControls">
         <div id="content">
           <label className="custom-file-upload">
             Select MP3
@@ -55,9 +55,12 @@ const App = () => {
           damping: 20,
         }}
       >
-        <button onClick={() => setPlaying(!playing)}>
-          {playing ? "Stop" : "Start"}
-        </button>
+        {!playing && (
+          <button onClick={() => setPlaying(!playing)}>
+            {playing ? "Stop" : "Start"}
+          </button>
+        )}
+
         {playing ? <AudioControls /> : null}
       </motion.div>
     </div>
