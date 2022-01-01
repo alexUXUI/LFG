@@ -13,6 +13,14 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
+  module: {
+    rules: [
+      {
+        test: /\.mp3$/,
+        loader: "file-loader",
+      },
+    ],
+  },
   devServer,
   devtool: "source-map", // high quality source maps
 };

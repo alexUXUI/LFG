@@ -39,6 +39,7 @@ gui.add(config, "yAngleFunction", angleOptions);
 // });
 
 // MATERIAL
+// https://medium.com/geekculture/threejs-tutorial-comparing-the-most-common-materials-424eef8942a4
 var pinkMat = new THREE.MeshPhongMaterial({
   color: new THREE.Color("rgb(100,100,100)"),
   emissive: new THREE.Color("rgb(10,10,10)"),

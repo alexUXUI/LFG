@@ -9,3 +9,10 @@ p {
   margin: 0;
   padding: 0;
 }
+
+#content {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
