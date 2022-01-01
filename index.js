@@ -23,11 +23,9 @@ import {
 
 // AUDIO
 import { initAudio } from "./audio/audio.js";
-import { sourceAudio } from "./audio/source.js";
 
-// initAudio();
-
-console.log(sourceAudio());
+import file from "./audio/song.mp3";
+import { AudioManager } from "./audio/source.js";
 
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
@@ -50,16 +48,44 @@ scene.add(icosahedron);
 // scene.add(box);
 // scene.add(cube);
 
-// ANIMATION LOOP
-function animate() {
-  // analyser.getFrequencyData();
-  // uniforms.tAudioData.value.needsUpdate = true;
+let playing = false;
 
-  requestAnimationFrame(animate);
-  animateIcosahedron();
-  rotateCameraAroundScene(scene.position, camera);
-  renderer.render(scene, camera);
-}
+// Reference to the animation frame callback
+// Allows us to stop and start the animation frame callback
+let frameId;
 
-// RUN THE ANIMATION LOOP
-animate();
+window.addEventListener("click", () => {
+  if (!playing) {
+    // const analyser = sourceAudio();
+
+    const audioManager = new AudioManager();
+
+    const analyser = audioManager.sourceAudio();
+
+    console.log(analyser);
+
+    // ANIMATION LOOP
+    function animate() {
+      // get the average frequency of the sound
+      const data1 = analyser.getAverageFrequency();
+      const data2 = analyser.getFrequencyData();
+
+      console.log(data2);
+
+      // console.log(analyser);
+
+      frameId = requestAnimationFrame(animate);
+      animateIcosahedron();
+      rotateCameraAroundScene(scene.position, camera);
+      renderer.render(scene, camera);
+    }
+
+    // RUN THE ANIMATION LOOP
+    animate();
+
+    playing = true;
+  } else {
+    cancelAnimationFrame(frameId);
+    playing = false;
+  }
+});

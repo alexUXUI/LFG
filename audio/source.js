@@ -3,34 +3,30 @@ import file from "./song.mp3";
 
 let playing = false;
 
-export const sourceAudio = () => {
-  window.addEventListener("click", () => {
-    const listener = new THREE.AudioListener();
-    const audio = new THREE.Audio(listener);
-    const fftSize = 128;
+export class AudioManager {
+  constructor() {
+    this.listener = new THREE.AudioListener();
+    this.audio = new THREE.Audio(this.listener);
+    this.fftSize = 128;
+    this.loader = new THREE.AudioLoader();
+    this.loop = true;
+    this.mediaElement = new Audio(file);
+  }
 
+  sourceAudio = () => {
     if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
-      const loader = new THREE.AudioLoader();
-      loader.load(file, function (buffer) {
-        audio.setBuffer(buffer);
-        sound.setLoop(true);
-        if (!playing) {
-          audio.play();
-        } else {
-          audio.pause();
-        }
+      this.loader.load(file, function (buffer) {
+        this.audio.setBuffer(buffer);
+        sound.setLoop(this.loop);
+        this.audio.play();
       });
     } else {
-      const mediaElement = new Audio(file);
-      mediaElement.play();
-      audio.setMediaElementSource(mediaElement);
+      this.mediaElement.play();
+      this.audio.setMediaElementSource(this.mediaElement);
     }
 
-    const analyser = new THREE.AudioAnalyser(audio, fftSize);
-
-    // get the average frequency of the sound
-    // const data = analyser.getAverageFrequency();
+    const analyser = new THREE.AudioAnalyser(this.audio, this.fftSize);
 
     return analyser;
-  });
-};
+  };
+}
