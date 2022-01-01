@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { motion } from "framer-motion";
 
-import "./start-screen.css";
+import "../css/start-screen.css";
 
 const App = () => {
   const [playing, setPlaying] = React.useState(false);
@@ -10,12 +10,12 @@ const App = () => {
 
   React.useEffect(() => {
     if (playing) {
-      import("./index.js").then(({ runViz }) => {
+      import("../index.js").then(({ runViz }) => {
         runViz(playing);
       });
     } else {
       if (!firstMount.current) {
-        import("./index.js").then(({ runViz }) => {
+        import("../index.js").then(({ runViz }) => {
           runViz(false);
         });
       }
@@ -56,9 +56,15 @@ const App = () => {
         }}
       >
         {!playing && (
-          <button onClick={() => setPlaying(!playing)}>
-            {playing ? "Stop" : "Start"}
-          </button>
+          <>
+            <h1>Welcome to the Audio Visualizer! 🔥</h1>
+            <h2>Where your audio data generates 3D graphics</h2>
+            <h3>About</h3>
+            <p>To get started CLick Play</p>
+            <button onClick={() => setPlaying(!playing)}>
+              {playing ? "Stop" : "Start"}
+            </button>
+          </>
         )}
 
         {playing ? <AudioControls /> : null}

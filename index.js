@@ -65,7 +65,7 @@ export const runViz = (playing) => {
       scene.add(gridHelper);
     };
 
-    allHelpers(scene);
+    // allHelpers(scene);
 
     // ADD LIGHTS TO SCENE
     scene.add(warmLight);

@@ -1,9 +1,9 @@
 import * as THREE from "three";
-// import { gui } from "../dat.gui.js";
+import { gui } from "../dat.gui.js";
 import { scene } from "../../index.js";
 import { camera } from "../camera.js";
 
-// const icosahedronFolder = gui.addFolder("Icosahedron");
+const icosahedronFolder = gui.addFolder("Icosahedron");
 
 const config = {
   xAngleFunction: "sin",
@@ -29,19 +29,19 @@ const angleOptions = {
   tan: "tan",
 };
 
-// gui.add(config, "xAngleFunction", angleOptions);
-// gui.add(config, "yAngleFunction", angleOptions);
+gui.add(config, "xAngleFunction", angleOptions);
+gui.add(config, "yAngleFunction", angleOptions);
 
-// gui.add(config, "size", 0, 10).onChange((size) => {
-//   // geometry.setAttribute("size", size);
-//   // geometry.attributes.size.needsUpdate = true;
-// });
+gui.add(config, "size", 0, 10).onChange((size) => {
+  // geometry.setAttribute("size", size);
+  // geometry.attributes.size.needsUpdate = true;
+});
 
-// gui.add(config, "detail", 0, 10).onChange((detail) => {
-//   console.log(detail);
-//   // geometry.setAttribute("detail", detail);
-//   // geometry.attributes.detail.needsUpdate = true;
-// });
+gui.add(config, "detail", 0, 10).onChange((detail) => {
+  console.log(detail);
+  // geometry.setAttribute("detail", detail);
+  // geometry.attributes.detail.needsUpdate = true;
+});
 
 // MATERIAL
 // https://medium.com/geekculture/threejs-tutorial-comparing-the-most-common-materials-424eef8942a4
@@ -96,7 +96,7 @@ const normals = JSON.parse(
   JSON.stringify(icosahedron.geometry.attributes.normal.array)
 );
 
-const damping = 2;
+const damping = 1;
 
 const createArray = (array) => {
   let newArray = [];
@@ -109,11 +109,6 @@ const createArray = (array) => {
 
 // ANIMATE
 export function animateIcosahedron(avgFrequency, frequencyData) {
-  /**
-   * AUDIO DATA: 64 numbers between 0 and 255
-   */
-  // console.log(avgFrequency);
-
   const {
     geometry: { attributes },
   } = icosahedron;
@@ -121,10 +116,6 @@ export function animateIcosahedron(avgFrequency, frequencyData) {
   const now = Date.now() / 300;
 
   for (let i = 0; i < count; i++) {
-    //
-    // let MAX = Math.max(...avgFrequency) / 5;
-    // let MIN = Math.min(...avgFrequency) / 5;
-
     const ix = i * 3;
     const iy = i * 3 + 1;
     const iz = i * 3 + 2;

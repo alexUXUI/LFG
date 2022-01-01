@@ -8,7 +8,7 @@ const devServer = {
 
 module.exports = {
   mode: "development",
-  entry: "./app.jsx",
+  entry: "./app/app.jsx",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
