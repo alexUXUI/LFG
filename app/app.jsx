@@ -3,46 +3,13 @@ import * as ReactDOM from "react-dom";
 import { motion } from "framer-motion";
 
 import "../css/start-screen.css";
+import { useAudioVisualizer } from "./hooks/visualizer.hook";
+import { AudioControls } from "./audio.component";
 
 const App = () => {
   const [playing, setPlaying] = React.useState(false);
-  const firstMount = React.useRef(true);
 
-  React.useEffect(() => {
-    if (playing) {
-      import("../index.js").then(({ runViz }) => {
-        runViz(playing);
-      });
-    } else {
-      if (!firstMount.current) {
-        import("../index.js").then(({ runViz }) => {
-          runViz(false);
-        });
-      }
-    }
-    firstMount.current = false;
-  }, [playing]);
-
-  const AudioControls = () => {
-    return (
-      <div className="audioControls">
-        <div id="content">
-          <label className="custom-file-upload">
-            Select MP3
-            <input
-              type="file"
-              id="thefile"
-              accept="audio/*"
-              onChange={() => {
-                setPlaying(true);
-              }}
-            />
-          </label>
-          <audio id="audio" controls></audio>
-        </div>
-      </div>
-    );
-  };
+  useAudioVisualizer(playing);
 
   return (
     <div id="screen--start">
@@ -66,7 +33,6 @@ const App = () => {
             </button>
           </>
         )}
-
         {playing ? <AudioControls /> : null}
       </motion.div>
     </div>
