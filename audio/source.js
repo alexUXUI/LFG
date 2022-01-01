@@ -13,12 +13,24 @@ export class AudioManager {
     this.mediaElement = new Audio(file);
   }
 
+  play() {
+    if (this.audio) {
+      this.audio.play();
+    }
+  }
+
+  pause() {
+    if (this.audio) {
+      this.audio.pause();
+    }
+  }
+
   analyser = () => {
     if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
       this.loader.load(file, function (buffer) {
         this.audio.setBuffer(buffer);
         sound.setLoop(this.loop);
-        this.audio.play();
+        // this.audio.play();
       });
     } else {
       this.mediaElement.play();

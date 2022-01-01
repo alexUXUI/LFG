@@ -54,38 +54,46 @@ let playing = false;
 // Allows us to stop and start the animation frame callback
 let frameId;
 
-window.addEventListener("click", () => {
-  if (!playing) {
-    // const analyser = sourceAudio();
+document.addEventListener("keydown", (key) => {
+  if (key.key === " ") {
+    // window.addEventListener("click", () => {
+    if (!playing) {
+      // const analyser = sourceAudio();
 
-    const audioManager = new AudioManager();
-    const analyser = audioManager.analyser();
+      const audioManager = new AudioManager();
+      audioManager.play();
+      const analyser = audioManager.analyser();
 
-    // ANIMATION LOOP
-    function animate() {
-      // Derive the frequency data from the current audio source
-      // const data1 = analyser.getAverageFrequency();
-      // const data2 = analyser.getFrequencyData();
+      // ANIMATION LOOP
+      function animate() {
+        // Derive the frequency data from the current audio source
+        // const data1 = analyser.getAverageFrequency();
+        const data2 = analyser.getFrequencyData();
 
-      // run the loop
-      frameId = requestAnimationFrame(animate);
+        // run the loop
+        frameId = requestAnimationFrame(animate);
 
-      // Animates the icosahedron
-      animateIcosahedron();
+        // Animates the icosahedron
+        animateIcosahedron(data2);
 
-      // Rotates the camera around the scene
-      rotateCameraAroundScene(scene.position, camera);
+        // Rotates the camera around the scene
+        rotateCameraAroundScene(scene.position, camera);
 
-      // renders the scene
-      renderer.render(scene, camera);
+        // renders the scene
+        renderer.render(scene, camera);
+      }
+
+      // RUN THE ANIMATION LOOP
+      animate();
+
+      playing = true;
+    } else {
+      cancelAnimationFrame(frameId);
+      playing = false;
+      AudioManager.pause();
+      while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+      }
     }
-
-    // RUN THE ANIMATION LOOP
-    animate();
-
-    playing = true;
-  } else {
-    cancelAnimationFrame(frameId);
-    playing = false;
   }
 });

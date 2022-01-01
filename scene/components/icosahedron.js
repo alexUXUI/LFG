@@ -64,7 +64,7 @@ export const icosahedron = new THREE.Mesh(geometry, pinkMat);
  * https://dustinpfister.github.io/2021/06/07/threejs-buffer-geometry-attributes-position/
  **/
 const count = icosahedron.geometry.attributes.position.count;
-
+console.log(`count ${count}`);
 const position = JSON.parse(
   JSON.stringify(icosahedron.geometry.attributes.position.array)
 );
@@ -75,21 +75,41 @@ const normals = JSON.parse(
 
 const damping = 0.2;
 
+const createArray = (array) => {
+  let newArray = [];
+  for (let i = 33.75; i < count; i++) {
+    newArray.push(array);
+  }
+
+  return newArray;
+};
+
 // ANIMATE
-export function animateIcosahedron() {
+export function animateIcosahedron(audioData) {
+  /**
+   * AUDIO DATA: 64 numbers between 0 and 255
+   */
+
   const {
     geometry: { attributes },
   } = icosahedron;
 
   const now = Date.now() / 300;
   for (let i = 0; i < count; i++) {
+    let frequency = audioData[i] / 5;
+
+    // console.log(frequency);
+
+    let MAX = Math.max(...audioData) / 5;
+    let MIN = Math.min(...audioData) / 5;
+
     const ix = i * 3;
     const iy = i * 3 + 1;
     const iz = i * 3 + 2;
 
     // use uvs to calculate wave
-    const uX = attributes.uv.getX(i) * Math.PI * 16;
-    const uY = attributes.uv.getY(i) * Math.PI * 16;
+    const uX = attributes.uv.getX(i) * Math.PI * MIN;
+    const uY = attributes.uv.getY(i) * Math.PI * MAX;
 
     // calculate current vertex wave height
     const xangle = uX + now;
@@ -162,7 +182,6 @@ var pinkMat2 = new THREE.MeshPhongMaterial({
 export const icosahedron2 = new THREE.Mesh(geometry, pinkMat);
 
 export const newIcosahedron = Icosahedron.Geometry(icosahedron2);
-console.log(newIcosahedron);
 // // // newIcosahedron.position.set(5, 5, 0);
 // icosahedron2.position.set(5, 5, 0);
 // scene.add(icosahedron2);
