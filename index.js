@@ -54,6 +54,29 @@ let playing = false;
 // Allows us to stop and start the animation frame callback
 let frameId;
 
+function avg(arr) {
+  var total = arr.reduce(function (sum, b) {
+    return sum + b;
+  });
+  return total / arr.length;
+}
+
+function max(arr) {
+  return arr.reduce(function (a, b) {
+    return Math.max(a, b);
+  });
+}
+
+function fractionate(val, minVal, maxVal) {
+  return (val - minVal) / (maxVal - minVal);
+}
+
+function modulate(val, minVal, maxVal, outMin, outMax) {
+  var fr = fractionate(val, minVal, maxVal);
+  var delta = outMax - outMin;
+  return outMin + fr * delta;
+}
+
 document.addEventListener("keydown", (key) => {
   if (key.key === " ") {
     // window.addEventListener("click", () => {
@@ -67,14 +90,39 @@ document.addEventListener("keydown", (key) => {
       // ANIMATION LOOP
       function animate() {
         // Derive the frequency data from the current audio source
-        // const data1 = analyser.getAverageFrequency();
-        const data2 = analyser.getFrequencyData();
+
+        const avgFrequencyData = analyser.getAverageFrequency();
+        // console.log(avgFrequencyData);
+
+        const frequencyData = analyser.getFrequencyData();
+
+        // PREPARE AUDIO DATA
+        const lowerHalfArray = frequencyData.slice(
+          0,
+          frequencyData.length / 2 - 1
+        );
+        const upperHalfArray = frequencyData.slice(
+          frequencyData.length / 2 - 1,
+          frequencyData.length - 1
+        );
+
+        const overallAvg = avg(frequencyData);
+
+        const lowerMax = max(lowerHalfArray);
+        const lowerAvg = avg(lowerHalfArray);
+        const upperMax = max(upperHalfArray);
+        const upperAvg = avg(upperHalfArray);
+
+        const lowerMaxFr = lowerMax / lowerHalfArray.length;
+        const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+        const upperMaxFr = upperMax / upperHalfArray.length;
+        const upperAvgFr = upperAvg / upperHalfArray.length;
 
         // run the loop
         frameId = requestAnimationFrame(animate);
 
         // Animates the icosahedron
-        animateIcosahedron(data2);
+        animateIcosahedron(avgFrequencyData, frequencyData);
 
         // Rotates the camera around the scene
         rotateCameraAroundScene(scene.position, camera);

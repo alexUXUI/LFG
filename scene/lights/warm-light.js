@@ -6,8 +6,8 @@ export const warmLight = new THREE.PointLight(0xffffff, 1, 100);
 const wamrLight = {
   x: 2,
   y: 3,
-  z: 4,
-  color: 0xffffff,
+  z: 20,
+  color: 0xff0000,
 };
 
 const { x, y, z } = wamrLight;

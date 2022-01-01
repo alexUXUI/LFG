@@ -8,7 +8,7 @@ export const coolLight = new THREE.PointLight(0xffffff, 1, 100);
 const coolLightConfig = {
   x: -2,
   y: -3,
-  z: -4,
+  z: -20,
   color: 0x3000ff,
 };
 
@@ -25,15 +25,15 @@ const config = gui.addFolder("Cool Light");
 
 config.add(coolLight, "intensity", 0, 1);
 
-config.add(coolLightConfig, "x", -10, 10).onChange((x) => {
+config.add(coolLightConfig, "x", -50, 50).onChange((x) => {
   coolLight.position.set(x, y, z);
 });
 
-config.add(coolLightConfig, "y", -10, 10).onChange((y) => {
+config.add(coolLightConfig, "y", -50, 50).onChange((y) => {
   coolLight.position.set(x, y, z);
 });
 
-config.add(coolLightConfig, "z", -10, 10).onChange((z) => {
+config.add(coolLightConfig, "z", -50, 50).onChange((z) => {
   coolLight.position.set(x, y, z);
 });
 

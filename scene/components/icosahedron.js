@@ -77,7 +77,7 @@ const damping = 0.2;
 
 const createArray = (array) => {
   let newArray = [];
-  for (let i = 33.75; i < count; i++) {
+  for (let i = 18; i < count; i++) {
     newArray.push(array);
   }
 
@@ -85,31 +85,30 @@ const createArray = (array) => {
 };
 
 // ANIMATE
-export function animateIcosahedron(audioData) {
+export function animateIcosahedron(avgFrequency, frequencyData) {
   /**
    * AUDIO DATA: 64 numbers between 0 and 255
    */
+  // console.log(avgFrequency);
 
   const {
     geometry: { attributes },
   } = icosahedron;
 
   const now = Date.now() / 300;
+
   for (let i = 0; i < count; i++) {
-    let frequency = audioData[i] / 5;
-
-    // console.log(frequency);
-
-    let MAX = Math.max(...audioData) / 5;
-    let MIN = Math.min(...audioData) / 5;
+    //
+    // let MAX = Math.max(...avgFrequency) / 5;
+    // let MIN = Math.min(...avgFrequency) / 5;
 
     const ix = i * 3;
     const iy = i * 3 + 1;
     const iz = i * 3 + 2;
 
     // use uvs to calculate wave
-    const uX = attributes.uv.getX(i) * Math.PI * MIN;
-    const uY = attributes.uv.getY(i) * Math.PI * MAX;
+    const uX = (attributes.uv.getX(i) * Math.PI * avgFrequency) / 3;
+    const uY = (attributes.uv.getY(i) * Math.PI * avgFrequency) / 3;
 
     // calculate current vertex wave height
     const xangle = uX + now;
@@ -122,6 +121,19 @@ export function animateIcosahedron(audioData) {
     attributes.position.setX(i, position[ix] + normals[ix] * (xsin + ycos));
     attributes.position.setY(i, position[iy] + normals[iy] * (xsin + ycos));
     attributes.position.setZ(i, position[iz] + normals[iz] * (xsin + ycos));
+
+    // attributes.position.setX(
+    //   i,
+    //   position[ix] + (normals[ix] * avgFrequency) / 10
+    // );
+    // attributes.position.setY(
+    //   i,
+    //   position[iy] + (normals[iy] * avgFrequency) / 10
+    // );
+    // attributes.position.setZ(
+    //   i,
+    //   position[iz] + (normals[iz] * avgFrequency) / 10
+    // );
   }
 
   icosahedron.geometry.computeVertexNormals();
@@ -129,59 +141,3 @@ export function animateIcosahedron(audioData) {
 }
 
 icosahedron.position.set(0, 0, 0);
-
-//////
-// 2
-//////
-
-function updateGroupGeometry(mesh, geometry) {
-  mesh.geometry.dispose();
-  mesh.geometry = new THREE.WireframeGeometry(geometry);
-  // these do not update nicely together if shared
-}
-
-const Icosahedron = {
-  Geometry: function (mesh) {
-    const data = {
-      radius: 10,
-      detail: 0,
-    };
-
-    function generateGeometry() {
-      updateGroupGeometry(
-        mesh,
-        new THREE.IcosahedronBufferGeometry(data.radius, data.detail)
-      );
-    }
-
-    const folder = gui.addFolder("THREE.IcosahedronGeometry");
-
-    folder.add(data, "radius", 1, 20).onChange(generateGeometry);
-    folder.add(data, "detail", 0, 5).step(1).onChange(generateGeometry);
-
-    return generateGeometry();
-  },
-};
-
-// const clonedIcosahedron = icosahedron.clone();
-
-// GEOMETRY
-const geometry2 = new THREE.IcosahedronBufferGeometry(
-  config.size,
-  config.detail
-);
-
-var pinkMat2 = new THREE.MeshPhongMaterial({
-  color: new THREE.Color("rgb(100,100,100)"),
-  emissive: new THREE.Color("rgb(10,10,10)"),
-  transparent: 1,
-  opacity: 1,
-  shininess: 100,
-});
-
-export const icosahedron2 = new THREE.Mesh(geometry, pinkMat);
-
-export const newIcosahedron = Icosahedron.Geometry(icosahedron2);
-// // // newIcosahedron.position.set(5, 5, 0);
-// icosahedron2.position.set(5, 5, 0);
-// scene.add(icosahedron2);
