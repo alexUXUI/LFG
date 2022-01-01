@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import file from "./song.mp3";
+import file from "./motzart.mp3";
 
 let playing = false;
 

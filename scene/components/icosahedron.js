@@ -7,8 +7,8 @@ const icosahedronFolder = gui.addFolder("Icosahedron");
 const config = {
   xAngleFunction: "sin",
   yAngleFunction: "cos",
-  size: 2,
-  detail: 5,
+  size: 10,
+  detail: 10,
 };
 
 // GEOMETRY
@@ -65,6 +65,7 @@ export const icosahedron = new THREE.Mesh(geometry, pinkMat);
  **/
 const count = icosahedron.geometry.attributes.position.count;
 console.log(`count ${count}`);
+
 const position = JSON.parse(
   JSON.stringify(icosahedron.geometry.attributes.position.array)
 );
@@ -73,7 +74,7 @@ const normals = JSON.parse(
   JSON.stringify(icosahedron.geometry.attributes.normal.array)
 );
 
-const damping = 0.2;
+const damping = 2;
 
 const createArray = (array) => {
   let newArray = [];

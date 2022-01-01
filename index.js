@@ -33,13 +33,13 @@ export const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
 // ADD HELPERS TO SCENE
-scene.add(axesHelper);
-scene.add(gridHelper);
+// scene.add(axesHelper);
+// scene.add(gridHelper);
 
 // ADD LIGHTS TO SCENE
 scene.add(warmLight);
-scene.add(warmLightHelper);
-scene.add(coolLightHelper);
+// scene.add(warmLightHelper);
+// scene.add(coolLightHelper);
 scene.add(coolLight);
 
 // ADD COMPONENTS TO SEEN
@@ -53,29 +53,6 @@ let playing = false;
 // Reference to the animation frame callback
 // Allows us to stop and start the animation frame callback
 let frameId;
-
-function avg(arr) {
-  var total = arr.reduce(function (sum, b) {
-    return sum + b;
-  });
-  return total / arr.length;
-}
-
-function max(arr) {
-  return arr.reduce(function (a, b) {
-    return Math.max(a, b);
-  });
-}
-
-function fractionate(val, minVal, maxVal) {
-  return (val - minVal) / (maxVal - minVal);
-}
-
-function modulate(val, minVal, maxVal, outMin, outMax) {
-  var fr = fractionate(val, minVal, maxVal);
-  var delta = outMax - outMin;
-  return outMin + fr * delta;
-}
 
 document.addEventListener("keydown", (key) => {
   if (key.key === " ") {
@@ -96,27 +73,9 @@ document.addEventListener("keydown", (key) => {
 
         const frequencyData = analyser.getFrequencyData();
 
-        // PREPARE AUDIO DATA
-        const lowerHalfArray = frequencyData.slice(
-          0,
-          frequencyData.length / 2 - 1
-        );
-        const upperHalfArray = frequencyData.slice(
-          frequencyData.length / 2 - 1,
-          frequencyData.length - 1
-        );
+        coolLight.intensity = avgFrequencyData / 30;
 
-        const overallAvg = avg(frequencyData);
-
-        const lowerMax = max(lowerHalfArray);
-        const lowerAvg = avg(lowerHalfArray);
-        const upperMax = max(upperHalfArray);
-        const upperAvg = avg(upperHalfArray);
-
-        const lowerMaxFr = lowerMax / lowerHalfArray.length;
-        const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-        const upperMaxFr = upperMax / upperHalfArray.length;
-        const upperAvgFr = upperAvg / upperHalfArray.length;
+        warmLight.intensity = avgFrequencyData / 30;
 
         // run the loop
         frameId = requestAnimationFrame(animate);
@@ -136,12 +95,12 @@ document.addEventListener("keydown", (key) => {
 
       playing = true;
     } else {
-      cancelAnimationFrame(frameId);
-      playing = false;
-      AudioManager.pause();
       while (scene.children.length > 0) {
         scene.remove(scene.children[0]);
       }
+      cancelAnimationFrame(frameId);
+      playing = false;
+      AudioManager.pause();
     }
   }
 });
