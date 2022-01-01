@@ -25,7 +25,7 @@ import {
 import { prepareIcosahedron } from "./transformer/icosahedron.js";
 
 import file from "./audio/song.mp3";
-import { AudioManager } from "./audio/source.js";
+import { audioManager } from "./audio/source.js";
 
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
@@ -59,8 +59,6 @@ document.addEventListener("keydown", (key) => {
     // window.addEventListener("click", () => {
     if (!playing) {
       // const analyser = sourceAudio();
-
-      const audioManager = new AudioManager();
       audioManager.play();
       const analyser = audioManager.analyser();
 

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { gui } from "../dat.gui.js";
 import { scene } from "../../index.js";
+import { camera } from "../camera.js";
 
 const icosahedronFolder = gui.addFolder("Icosahedron");
 
@@ -9,18 +10,16 @@ const config = {
   yAngleFunction: "cos",
   size: 10,
   detail: 10,
+  geometry: "IcosahedronBufferGeometry",
 };
 
 // GEOMETRY
-// const geometry = new THREE.IcosahedronBufferGeometry(
+const geometry = new THREE[config.geometry](config.size, config.detail);
+
+// const geometry = new THREE.DodecahedronBufferGeometry(
 //   config.size,
 //   config.detail
 // );
-
-const geometry = new THREE.DodecahedronBufferGeometry(
-  config.size,
-  config.detail
-);
 
 const angleOptions = {
   sin: "sin",
@@ -56,6 +55,23 @@ var pinkMat = new THREE.MeshPhongMaterial({
 // ICOSAHEDRON (MESH = GEOMETRY + MATERIAL)
 export const icosahedron = new THREE.Mesh(geometry, pinkMat);
 
+gui
+  .add(config, "geometry", [
+    "IcosahedronBufferGeometry",
+    "DodecahedronBufferGeometry",
+  ])
+  .onChange((value) => {
+    const geometryToMove = icosahedron.geometry;
+    scene.remove(icosahedron);
+
+    var mesh2 = new THREE.Mesh();
+    mesh2.geometry = geometryToMove;
+    scene.add(mesh2);
+
+    mesh2.material.needsUpdate = true;
+
+    // renderer.render(scene, camera);
+  });
 /**
  * ICOSAHEDRON ATTRIBUTES
  * Used to get / organize the data associated with the icosahedron
