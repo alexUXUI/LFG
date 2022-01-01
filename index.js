@@ -24,7 +24,7 @@ import {
 import { prepareIcosahedron } from "./transformer/icosahedron.js";
 
 // AUDIO
-import { AudioManager } from "./audio/source.js";
+import { AudioManager } from "./scene/audio.js";
 
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
@@ -53,6 +53,48 @@ let frameId;
 
 // Only start the process when the user clicks the spacebar
 // document.addEventListener("keydown", (key) => {
+
+const player = document.getElementById("audio");
+
+const handleSuccess = function (stream) {
+  console.log("handling");
+  if (window.URL) {
+    console.log("srcObject");
+    player.srcObject = stream;
+
+    // const context = new AudioContext();
+    // const source = context.createMediaStreamSource(stream);
+    // source.connect(analyser);
+
+    // var analyser = context.createAnalyser();
+
+    // analyser.fftSize = 2048;
+    // var bufferLength = analyser.frequencyBinCount;
+    // var dataArray = new Uint8Array(bufferLength);
+    ///
+
+    const context = new AudioContext();
+    const src = context.createMediaStreamSource(stream);
+    const analyser = context.createAnalyser();
+
+    src.connect(analyser);
+    analyser.connect(context.destination);
+
+    analyser.fftSize = 2048;
+
+    const bufferLength = analyser.frequencyBinCount;
+    console.log(bufferLength);
+
+    const dataArray = new Uint8Array(bufferLength);
+  } else {
+    console.log("src");
+    player.src = stream;
+  }
+};
+
+navigator.mediaDevices
+  .getUserMedia({ audio: true, video: false })
+  .then(handleSuccess);
 
 var file = document.getElementById("thefile");
 var audio = document.getElementById("audio");

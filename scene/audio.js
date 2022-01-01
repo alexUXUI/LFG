@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import file from "./motzart.mp3";
-import { gui } from "../scene/dat.gui.js";
+import { gui } from "./dat.gui.js";
 
 const audioConfig = {
   fftSize: 2048,
@@ -11,8 +10,6 @@ gui
   .onChange((fftSize) => {
     audioManager.setFFTSize(fftSize);
   });
-
-let playing = false;
 
 export class AudioManager {
   constructor(audio) {
@@ -57,5 +54,11 @@ export class AudioManager {
     const analyser = new THREE.AudioAnalyser(this.audio, this.fftSize);
 
     return analyser;
+  };
+
+  voice = () => {
+    // source audio from microphone and use the mediaElement
+    this.mediaElement.play();
+    this.audio.setMediaElementSource(this.mediaElement);
   };
 }
