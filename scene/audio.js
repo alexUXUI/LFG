@@ -16,13 +16,10 @@ export class AudioManager {
     this.listener = new THREE.AudioListener();
     this.audio = new THREE.Audio(this.listener);
     this.fftSize = audioConfig.fftSize;
-    if (type === "mic") {
-    } else {
-      this.loader = new THREE.AudioLoader();
-      this.loop = true;
-      this.mediaElement = audio;
-      this.incomingAudio = audio;
-    }
+    this.loader = new THREE.AudioLoader();
+    this.loop = true;
+    this.mediaElement = audio;
+    this.incomingAudio = audio;
   }
 
   setFFTSize(fftSize) {

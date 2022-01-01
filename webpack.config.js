@@ -28,7 +28,6 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
       },
-      // add support for css modules
       {
         test: /\.css$/,
         use: {

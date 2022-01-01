@@ -1,7 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { camera } from "./camera.js";
-import { renderer } from "./renderer.js";
+import { Renderer, renderer } from "./renderer.js";
 
 // CONTROLS
-export const controls = new OrbitControls(camera, renderer.domElement);
+export const controls = new OrbitControls(
+  camera,
+  Renderer.getOrCreateDOMElement()
+);

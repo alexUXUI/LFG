@@ -10,7 +10,11 @@ import { coolLightHelper, coolLight } from "./scene/lights/cool-light.js";
 import { camera, rotateCameraAroundScene } from "./scene/camera.js";
 
 // SCENE IMPORTS
-import { renderer } from "./scene/renderer.js";
+import {
+  Renderer,
+  // renderer,
+  // newRenderer
+} from "./scene/renderer.js";
 import { controls } from "./scene/controls.js";
 import { axesHelper, gridHelper } from "./scene/helpers.js";
 
@@ -29,74 +33,88 @@ import { AudioManager, MicrophoneManager } from "./scene/audio.js";
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
 
-export const runViz = () => {
-  scene.background = new THREE.Color(0x000000);
+export const stopViz = () => {
+  scene.remove(icosahedron);
+  scene.remove(warmLight);
+  scene.remove(coolLight);
+  scene.remove(warmLightHelper);
+  scene.remove(coolLightHelper);
+  scene.remove(axesHelper);
+  scene.remove(gridHelper);
+  scene.remove(camera);
+  scene.remove(controls.domElement);
+  scene.remove(AudioManager.audioListener);
+  scene.remove(MicrophoneManager.audioListener);
+  scene.remove(AudioManager.audioSource);
+  scene.remove(MicrophoneManager.audioSource);
+  // renderer.domElement.remove();
+  Renderer.destroyRenderer();
+};
 
-  // ADD HELPERS TO SCENE
-  const allHelpers = (scene) => {
-    scene.add(axesHelper);
-    scene.add(warmLightHelper);
-    scene.add(coolLightHelper);
-    scene.add(gridHelper);
-  };
+export const runViz = (playing) => {
+  if (playing) {
+    const renderer = Renderer.getOrCreateRenderer();
+    console.log(renderer);
+    scene.background = new THREE.Color(0x000000);
 
-  allHelpers(scene);
+    // ADD HELPERS TO SCENE
+    const allHelpers = (scene) => {
+      scene.add(axesHelper);
+      scene.add(warmLightHelper);
+      scene.add(coolLightHelper);
+      scene.add(gridHelper);
+    };
 
-  // ADD LIGHTS TO SCENE
-  scene.add(warmLight);
-  scene.add(coolLight);
+    allHelpers(scene);
 
-  // ADD COMPONENTS TO SEEN
-  scene.add(icosahedron);
+    // ADD LIGHTS TO SCENE
+    scene.add(warmLight);
+    scene.add(coolLight);
 
-  // Is the scene playing?
-  let playing = false;
+    // ADD COMPONENTS TO SEEN
+    scene.add(icosahedron);
 
-  // Reference to the animation frame callback
-  // Allows us to stop and start the animation frame callback
-  let frameId;
+    // Reference to the animation frame callback
+    // Allows us to stop and start the animation frame callback
+    let frameId;
+    let microphoneMode = false;
 
-  // Only start the process when the user clicks the spacebar
-  // document.addEventListener("keydown", (key) => {
-
-  let microphoneMode = false;
-
-  if (microphoneMode) {
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: {
-          mandatory: {
-            googEchoCancellation: "true",
-            googAutoGainControl: "true",
-            googNoiseSuppression: "true",
-            googHighpassFilter: "true",
+    if (microphoneMode) {
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: {
+            mandatory: {
+              googEchoCancellation: "true",
+              googAutoGainControl: "true",
+              googNoiseSuppression: "true",
+              googHighpassFilter: "true",
+            },
+            optional: [],
           },
-          optional: [],
-        },
-        video: false,
-      })
-      .then(function (stream) {
-        console.log("handling");
+          video: false,
+        })
+        .then(function (stream) {
+          console.log("handling");
 
-        const microphone = new MicrophoneManager(stream);
-        // microphone.processAudio();
+          const microphone = new MicrophoneManager(stream);
+          // microphone.processAudio();
 
-        // const processor = microphone.makeProcessor();
-        // console.log(processor);
-      })
-      .catch((err) => {
-        console.error("could not connect to mic");
-        console.log(err);
-      });
-  } else {
-    var file = document.getElementById("thefile");
-    var audio = document.getElementById("audio");
-    file.onchange = function () {
-      var files = this.files;
-      audio.src = URL.createObjectURL(files[0]);
+          // const processor = microphone.makeProcessor();
+          // console.log(processor);
+        })
+        .catch((err) => {
+          console.error("could not connect to mic");
+          console.log(err);
+        });
+    } else {
+      var file = document.getElementById("thefile");
+      var audio = document.getElementById("audio");
+      file.onchange = function () {
+        var files = this.files;
+        audio.src = URL.createObjectURL(files[0]);
 
-      if (audio.paused) {
         const audioManager = new AudioManager(audio);
+        audioManager.play();
         const analyser = audioManager.analyser();
 
         // ANIMATION LOOP
@@ -128,16 +146,9 @@ export const runViz = () => {
 
         // RUN THE ANIMATION LOOP
         animate();
-
-        playing = true;
-      } else {
-        while (scene.children.length > 0) {
-          scene.remove(scene.children[0]);
-        }
-        cancelAnimationFrame(frameId);
-        playing = false;
-        AudioManager.pause();
-      }
-    };
+      };
+    }
+  } else {
+    stopViz();
   }
 };

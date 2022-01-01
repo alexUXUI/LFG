@@ -1,36 +1,56 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { runViz } from "./index";
-console.log(runViz);
+
 const App = () => {
-  const [playing, setPlaying] = React.useState(true);
+  const [playing, setPlaying] = React.useState(false);
+  const firstMount = React.useRef(true);
 
   React.useEffect(() => {
     if (playing) {
-      console.log("playing");
-      runViz();
+      import("./index.js").then(({ runViz }) => {
+        runViz(playing);
+      });
+    } else {
+      if (!firstMount.current) {
+        import("./index.js").then(({ runViz }) => {
+          runViz(false);
+        });
+      }
     }
+    firstMount.current = false;
   }, [playing]);
+
+  const AudioControls = () => {
+    return (
+      <div>
+        <div id="content">
+          <label className="custom-file-upload">
+            Select MP3
+            <input
+              type="file"
+              id="thefile"
+              accept="audio/*"
+              onChange={() => {
+                setPlaying(true);
+              }}
+            />
+          </label>
+          <audio id="audio" controls></audio>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div>
-      <h1>Hello World</h1>
-      <p>This is my first react app</p>
       <button onClick={() => setPlaying(!playing)}>
         {playing ? "Stop" : "Start"}
       </button>
-      <div id="content">
-        <label className="custom-file-upload">
-          Select MP3
-          <input type="file" id="thefile" accept="audio/*" />
-        </label>
-        <audio id="audio" controls></audio>
-      </div>
+      {playing ? <AudioControls /> : null}
     </div>
   );
 };
 
 // create and mount a react app
-
 const root = document.getElementById("root");
 ReactDOM.render(<App />, root);
