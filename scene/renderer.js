@@ -13,6 +13,8 @@ export class RendererManager {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.appendRendererToDOM();
+
+    return this.renderer;
   }
 
   appendRendererToDOM() {

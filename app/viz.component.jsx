@@ -2,9 +2,19 @@ import * as React from "react";
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
 
 export const AudioVisualizer = () => {
-  const [playing, setPlaying] = React.useState(false);
+  const [playing, setPlaying] = React.useState(true);
 
   useAudioVisualizer(playing);
+
+  React.useEffect(() => {
+    setPlaying(true);
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      setPlaying(false);
+    };
+  }, []);
 
   return (
     <div id="screen--start">

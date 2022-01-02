@@ -53,8 +53,7 @@ export const stopViz = () => {
 
 export const runViz = (playing) => {
   if (playing) {
-    const renderer = Renderer.getOrCreateRenderer();
-    console.log(renderer);
+    const renderer = Renderer.createRenderer();
     scene.background = new THREE.Color(0x000000);
 
     // ADD HELPERS TO SCENE
