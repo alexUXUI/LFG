@@ -24,20 +24,41 @@ import { prepareIcosahedron } from "./transformer/icosahedron.js";
 import { AudioManager, MicrophoneManager } from "./scene/audio.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+// POST PROCESSING
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
+
+// Dat GUI
+import { gui } from "./scene/dat.gui.js";
+
+// Renderer
 export const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// SCENE REFERENCE
+// Scene
 export const scene = new THREE.Scene();
 
+const sceneConfig = {
+  ambientLight: 0xffffff,
+  background: 0xffffff,
+};
+
+// Refs to audio and file HTML elements
 const file = document.getElementById("thefile");
 const audio = document.getElementById("audio");
 const audioManager = new AudioManager(audio);
 const analyser = audioManager.analyser();
 
+const config = gui.addFolder("Scene");
+
+config.addColor(sceneConfig, "background").onChange(function (value) {
+  scene.background.set(value);
+});
+
 export const runViz = (playing) => {
-  scene.background = new THREE.Color(0x000000);
+  scene.background = new THREE.Color(sceneConfig.background);
 
   const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -57,10 +78,6 @@ export const runViz = (playing) => {
 
   // ADD COMPONENTS TO SEEN
   scene.add(icosahedron);
-
-  // Reference to the animation frame callback
-  // Allows us to stop and start the animation frame callback
-  let frameId;
 
   file.onchange = function () {
     var files = this.files;
@@ -84,9 +101,6 @@ export const runViz = (playing) => {
         // PROCESS AUDIO DATA
         const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
           prepareIcosahedron(frequencyData);
-
-        // run the loop
-        // frameId = requestAnimationFrame(render);
 
         // adjusts the intensity of the light based on the average frequency
         coolLight.intensity = avgFrequencyData / 30;
@@ -121,28 +135,5 @@ export const runViz = (playing) => {
     window.stopAnimation = stop;
 
     start();
-
-    // ANIMATION LOOP
-
-    // RUN THE ANIMATION LOOP
-    // render();
   };
 };
-
-// export const stopViz = () => {
-//   scene.remove(icosahedron);
-//   scene.remove(warmLight);
-//   scene.remove(coolLight);
-//   scene.remove(warmLightHelper);
-//   scene.remove(coolLightHelper);
-//   scene.remove(axesHelper);
-//   scene.remove(gridHelper);
-//   scene.remove(camera);
-//   scene.remove(controls.domElement);
-//   scene.remove(AudioManager.audioListener);
-//   scene.remove(MicrophoneManager.audioListener);
-//   scene.remove(AudioManager.audioSource);
-//   scene.remove(MicrophoneManager.audioSource);
-//   // renderer.domElement.remove();
-//   Renderer.destroyRenderer();
-// };
