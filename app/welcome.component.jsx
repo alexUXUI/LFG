@@ -2,6 +2,8 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-location";
 
+import "../css/welcome.css";
+
 const container = {
   hidden: { opacity: 1, scale: 0 },
   visible: {
@@ -31,28 +33,28 @@ export const Welcome = () => {
 
   const Elements = [
     <h1>Welcome to the Audio Visualizer!</h1>,
-    <h2>Your audio data generates 3D graphics</h2>,
-    <h3>About</h3>,
-    <p>To get started Click Play</p>,
+    <h2>Generates 3D graphics with Audio.</h2>,
     <button onClick={onClick}>Go to Audio Viz</button>,
   ];
 
   return (
-    <motion.div
-      className="container"
-      variants={container}
-      initial="hidden"
-      animate="visible"
-    >
-      {Elements.map((index) => (
-        <motion.div
-          key={Math.random() * 100 + Math.random()}
-          className="item"
-          variants={item}
-        >
-          {index}
-        </motion.div>
-      ))}
-    </motion.div>
+    <div id="welcome">
+      <motion.div
+        className="container"
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+        {Elements.map((index) => (
+          <motion.div
+            key={Math.random() * 100 + Math.random()}
+            className="item"
+            variants={item}
+          >
+            {index}
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
   );
 };

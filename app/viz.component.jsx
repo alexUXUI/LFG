@@ -14,26 +14,13 @@ export const AudioVisualizer = () => {
             <>
               <label className="custom-file-upload">
                 Select MP3
-                <input
-                  type="file"
-                  id="thefile"
-                  accept="audio/*"
-                  onChange={() => {
-                    setPlaying(true);
-                  }}
-                />
+                <input type="file" id="thefile" accept="audio/*" />
               </label>
               <audio id="audio" controls></audio>
             </>
-          ) : null}
-
-          <button
-            onClick={() => {
-              setPlaying(true);
-            }}
-          >
-            Play
-          </button>
+          ) : (
+            <button onClick={() => setPlaying(true)}>Play</button>
+          )}
         </div>
       </div>
     </div>

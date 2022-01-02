@@ -16,12 +16,11 @@ import { ReactLocationDevtools } from "react-location-devtools";
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
 
 // Components
-import { AudioControls } from "./audio.component";
 import { Welcome } from "./welcome.component";
 import { AudioVisualizer } from "./viz.component";
 
 // styles
-import "../css/start-screen.css";
+import "../css/welcome.css";
 
 // React location route definitions
 const routes = [
