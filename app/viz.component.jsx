@@ -25,7 +25,9 @@ export const AudioVisualizer = () => {
         <div id="content">
           {playing ? (
             <>
-              <Link to="/">Home</Link>
+              <Link className="nav-link" to="/">
+                Home
+              </Link>
               <label className="custom-file-upload">
                 Select MP3
                 <input type="file" id="thefile" accept="audio/*" />
