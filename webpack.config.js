@@ -4,11 +4,14 @@ const devServer = {
   port: 8082,
   hot: true, // enables HMR
   open: true,
+  historyApiFallback: {
+    index: "index.html",
+  },
 };
 
 module.exports = {
   mode: "development",
-  entry: "./app/app.jsx",
+  entry: ["regenerator-runtime/runtime.js", "./app/app.jsx"],
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",

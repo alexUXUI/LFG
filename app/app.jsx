@@ -1,51 +1,54 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+// 3rd party Libs
+import React from "react";
+import ReactDOM from "react-dom";
+import {
+  Link,
+  MakeGenerics,
+  Outlet,
+  ReactLocation,
+  Router,
+  useMatch,
+} from "react-location";
 import { motion } from "framer-motion";
-
-import { ReactLocation, Router, useMatch, Outlet, Link } from "react-location";
-const reactLocation = new ReactLocation();
 import { ReactLocationDevtools } from "react-location-devtools";
 
+// Hooks
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
+
+// Components
 import { AudioControls } from "./audio.component";
 import { Welcome } from "./welcome.component";
+import { AudioVisualizer } from "./viz.component";
 
+// styles
 import "../css/start-screen.css";
 
+// React location route definitions
 const routes = [
   {
     path: "/",
-    children: [
-      {
-        path: "welcome",
-        element: <Welcome />,
-      },
-      {
-        path: "audio-viz",
-        element: <div>AWW YEAH!</div>,
-      },
-    ],
+    element: <Welcome />,
+  },
+  {
+    path: "/audio-viz",
+    element: <AudioVisualizer />,
   },
 ];
 
-const App = () => {
-  const [playing, setPlaying] = React.useState(false);
+// Set up a ReactLocation instance
+const location = new ReactLocation();
 
-  useAudioVisualizer(playing);
-
+function App() {
   return (
-    <Router routes={routes} location={reactLocation}>
-      <Link to="/welcome">welcome</Link>
-      <Link to="/audio-viz">Audio Viz</Link>
-      {/* <div id="screen--start">
-        <div>{playing ? <AudioControls /> : null}</div>
-      </div> */}
+    // Build our routes and render our router
+    <Router location={location} routes={routes}>
+      <Link to="/">Home</Link>
+      <Outlet />{" "}
+      {/* Start rendering router matches this is the window where all the routes get rendered*/}
       <ReactLocationDevtools initialIsOpen={false} />
-      <Outlet />
     </Router>
   );
-};
+}
 
-// create and mount a react app
-const root = document.getElementById("root");
-ReactDOM.render(<App />, root);
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);

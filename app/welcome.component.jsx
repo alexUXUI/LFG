@@ -1,5 +1,6 @@
 import * as React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-location";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -22,12 +23,20 @@ const item = {
 };
 
 export const Welcome = () => {
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate({ to: "./audio-viz", replace: true });
+  };
+
   const Elements = [
     <h1>Welcome to the Audio Visualizer!</h1>,
     <h2>Your audio data generates 3D graphics</h2>,
     <h3>About</h3>,
-    <p>To get started CLick Play</p>,
+    <p>To get started Click Play</p>,
+    <button onClick={onClick}>Go to Audio Viz</button>,
   ];
+
   return (
     <motion.div
       className="container"
