@@ -33,9 +33,15 @@ import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
 import { gui } from "./scene/dat.gui.js";
 
 // Renderer
-export const renderer = new THREE.WebGLRenderer();
+export let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+export const makeRenderer = () => {
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+};
 
 // Scene
 export const scene = new THREE.Scene();
@@ -46,18 +52,17 @@ const sceneConfig = {
   withHelpers: false,
 };
 
-// Refs to audio and file HTML elements
-const file = document.getElementById("thefile");
-const audio = document.getElementById("audio");
-const audioManager = new AudioManager(audio);
-const analyser = audioManager.analyser();
+export const runViz = () => {
+  // Refs to audio and file HTML elements
+  const file = document.getElementById("thefile");
+  const audio = document.getElementById("audio");
+  const audioManager = new AudioManager(audio);
+  const analyser = audioManager.analyser();
 
-export const runViz = (playing) => {
   scene.background = new THREE.Color(sceneConfig.background);
-  scene.add(pointsMesh);
 
   // Make Particle System
-  const particlesGeometry = new THREE.BufferGeometry;
+  const particlesGeometry = new THREE.BufferGeometry();
   const particlesCount = 5000;
 
   // x, y, z for all particles
@@ -67,7 +72,7 @@ export const runViz = (playing) => {
     positionArray[i] = Math.random();
   }
 
-  console.log(positionArray);
+  // console.log(positionArray);
 
   particlesGeometry.setAttribute(
     "position",
@@ -80,6 +85,12 @@ export const runViz = (playing) => {
 
   const pointsMesh = new THREE.Points(particlesGeometry, pointsMaterial);
 
+  scene.add(pointsMesh);
+
+  if (!renderer) {
+    makeRenderer();
+  }
+
   const controls = new OrbitControls(camera, renderer.domElement);
 
   // ADD LIGHTS TO SCENE
@@ -88,6 +99,8 @@ export const runViz = (playing) => {
 
   // ADD COMPONENTS TO SEEN
   scene.add(icosahedron);
+
+  console.log(file);
 
   file.onchange = function () {
     var files = this.files;
@@ -103,12 +116,11 @@ export const runViz = (playing) => {
       if (!stopped) {
         requestId = window.requestAnimationFrame(render);
 
-        // controls.update();
-        // AUDIO DATA
+        // Create Audio Data
         const avgFrequencyData = analyser.getAverageFrequency();
         const frequencyData = analyser.getFrequencyData();
 
-        // PROCESS AUDIO DATA
+        // Process Audio Data
         const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
           prepareIcosahedron(frequencyData);
 

@@ -1,10 +1,9 @@
 import * as React from "react";
 
-export const useAudioVisualizer = (playing, setShouldEnd, file) => {
+export const useAudioVisualizer = () => {
   React.useEffect(() => {
     import("../../index.js").then(({ runViz }) => {
-      console.log(file);
-      runViz(playing, setShouldEnd, file);
+      runViz();
     });
-  }, [playing, setShouldEnd, file]);
+  }, []);
 };

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
 import { Link } from "react-location";
 import motzart from "../audio/motzart.mp3";
+import { makeRenderer } from "../index";
 
 import "../css/audioviz.css";
 
@@ -10,6 +11,15 @@ export const AudioVisualizer = () => {
   const [isAudioPlaying, setIsAudioPlaying] = React.useState(false);
 
   useAudioVisualizer();
+
+  React.useEffect(() => {
+    console.log(`AWW YEAH`);
+    // look for canvasas in the DOM and if there are none, run the makeRenderer function
+    const canvas = document.getElementsByTagName("canvas");
+    if (canvas.length === 0) {
+      makeRenderer();
+    }
+  }, []);
 
   let style = !isAudioPlaying ? "cta" : "";
 

@@ -17,6 +17,23 @@ export const Welcome = () => {
     <button onClick={onClick}>Go to Audio Viz</button>,
   ];
 
+  React.useEffect(() => {
+    console.log(`THIS IS RUNING`)
+
+    // find any canvas elements in the DOM and remove them
+    const canvas = document.getElementsByTagName("canvas");
+    for (let i = 0; i < canvas.length; i++) {
+      canvas[i].remove();
+    }
+
+    // also remove dat gui elements
+    const gui = document.getElementsByClassName("dg");
+    for (let i = 0; i < gui.length; i++) {
+      gui[i].remove();
+    }
+    
+  }, []);
+
   return (
     <div id="welcome">
       <motion.div
