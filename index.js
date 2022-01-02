@@ -31,6 +31,11 @@ document.body.appendChild(renderer.domElement);
 // SCENE REFERENCE
 export const scene = new THREE.Scene();
 
+const file = document.getElementById("thefile");
+const audio = document.getElementById("audio");
+const audioManager = new AudioManager(audio);
+const analyser = audioManager.analyser();
+
 export const runViz = (playing) => {
   scene.background = new THREE.Color(0x000000);
 
@@ -57,14 +62,10 @@ export const runViz = (playing) => {
   // Allows us to stop and start the animation frame callback
   let frameId;
 
-  var file = document.getElementById("thefile");
-  var audio = document.getElementById("audio");
   file.onchange = function () {
     var files = this.files;
     audio.src = URL.createObjectURL(files[0]);
 
-    const audioManager = new AudioManager(audio);
-    const analyser = audioManager.analyser();
     audioManager.toggleMediaElement();
 
     var stopped;

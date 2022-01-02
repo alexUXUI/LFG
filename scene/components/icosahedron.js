@@ -71,7 +71,7 @@ export function animateIcosahedron(avgFrequency, frequencyData) {
     geometry: { attributes },
   } = icosahedron;
 
-  console.log(avgFrequency);
+  // console.log(avgFrequency);
 
   const now = Date.now() / timeCoefficient;
 
