@@ -2,9 +2,31 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { motion } from "framer-motion";
 
-import "../css/start-screen.css";
+import { ReactLocation, Router, useMatch, Outlet, Link } from "react-location";
+const reactLocation = new ReactLocation();
+import { ReactLocationDevtools } from "react-location-devtools";
+
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
 import { AudioControls } from "./audio.component";
+import { Welcome } from "./welcome.component";
+
+import "../css/start-screen.css";
+
+const routes = [
+  {
+    path: "/",
+    children: [
+      {
+        path: "welcome",
+        element: <Welcome />,
+      },
+      {
+        path: "audio-viz",
+        element: <div>AWW YEAH!</div>,
+      },
+    ],
+  },
+];
 
 const App = () => {
   const [playing, setPlaying] = React.useState(false);
@@ -12,30 +34,15 @@ const App = () => {
   useAudioVisualizer(playing);
 
   return (
-    <div id="screen--start">
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ rotate: 0, scale: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 20,
-        }}
-      >
-        {!playing && (
-          <>
-            <h1>Welcome to the Audio Visualizer! 🔥</h1>
-            <h2>Where your audio data generates 3D graphics</h2>
-            <h3>About</h3>
-            <p>To get started CLick Play</p>
-            <button onClick={() => setPlaying(!playing)}>
-              {playing ? "Stop" : "Start"}
-            </button>
-          </>
-        )}
-        {playing ? <AudioControls /> : null}
-      </motion.div>
-    </div>
+    <Router routes={routes} location={reactLocation}>
+      <Link to="/welcome">welcome</Link>
+      <Link to="/audio-viz">Audio Viz</Link>
+      {/* <div id="screen--start">
+        <div>{playing ? <AudioControls /> : null}</div>
+      </div> */}
+      <ReactLocationDevtools initialIsOpen={false} />
+      <Outlet />
+    </Router>
   );
 };
 
