@@ -7,6 +7,8 @@ import "../css/audioviz.css";
 export const AudioVisualizer = () => {
   const [file, setFile] = React.useState(undefined);
 
+  const [isAudioPlaying, setIsAudioPlaying] = React.useState(false);
+
   useAudioVisualizer();
 
   return (
@@ -32,13 +34,17 @@ export const AudioVisualizer = () => {
               id="audio"
               controls
               onEnded={(data) => {
-                console.log("AUDIO DONE");
+                window.stopAnimation();
+                setIsAudioPlaying(false);
               }}
               onPlay={(e) => {
                 console.log("AUDIO PLAY");
+                setIsAudioPlaying(true);
               }}
             ></audio>
           </>
+
+          {!isAudioPlaying && <h1>Get some tunes</h1>}
         </div>
       </div>
     </div>

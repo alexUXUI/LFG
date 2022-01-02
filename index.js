@@ -12,8 +12,9 @@ import { camera, rotateCameraAroundScene } from "./scene/camera.js";
 
 // SCENE COMPONENTS
 import {
-  icosahedron,
   animateIcosahedron,
+  icosahedron,
+  renderIcosahedron,
 } from "./scene/components/icosahedron.js";
 
 // DATA TRANSFORMERS
@@ -66,36 +67,64 @@ export const runViz = (playing) => {
     const analyser = audioManager.analyser();
     audioManager.toggleMediaElement();
 
-    // ANIMATION LOOP
-    function animate() {
-      // controls.update();
-      // AUDIO DATA
-      const avgFrequencyData = analyser.getAverageFrequency();
-      const frequencyData = analyser.getFrequencyData();
+    var stopped;
+    var requestId = 0;
+    var starttime;
 
-      // PROCESS AUDIO DATA
-      const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
-        prepareIcosahedron(frequencyData);
+    function render(time) {
+      if (!stopped) {
+        requestId = window.requestAnimationFrame(render);
 
-      // run the loop
-      frameId = requestAnimationFrame(animate);
+        // controls.update();
+        // AUDIO DATA
+        const avgFrequencyData = analyser.getAverageFrequency();
+        const frequencyData = analyser.getFrequencyData();
 
-      // adjusts the intensity of the light based on the average frequency
-      coolLight.intensity = avgFrequencyData / 30;
-      warmLight.intensity = avgFrequencyData / 30;
+        // PROCESS AUDIO DATA
+        const { lowerHalfArray, upperHalfArray, lowerAvg, upperAvg } =
+          prepareIcosahedron(frequencyData);
 
-      // Animates the icosahedron
-      animateIcosahedron(avgFrequencyData, frequencyData);
+        // run the loop
+        // frameId = requestAnimationFrame(render);
 
-      // Rotates the camera around the scene
-      rotateCameraAroundScene(scene.position, camera);
+        // adjusts the intensity of the light based on the average frequency
+        coolLight.intensity = avgFrequencyData / 30;
+        warmLight.intensity = avgFrequencyData / 30;
 
-      // renders the scene
-      renderer.render(scene, camera);
+        // Animates the icosahedron
+        animateIcosahedron(avgFrequencyData, frequencyData);
+
+        // Rotates the camera around the scene
+        rotateCameraAroundScene(scene.position, camera);
+
+        // renders the scene
+        renderer.render(scene, camera);
+      } else {
+        cancelAnimationFrame(requestId);
+      }
     }
 
+    function start() {
+      starttime = Date.now();
+      requestId = window.requestAnimationFrame(render);
+      stopped = false;
+    }
+
+    function stop() {
+      if (requestId) {
+        window.cancelAnimationFrame(requestId);
+      }
+      stopped = true;
+    }
+
+    window.stopAnimation = stop;
+
+    start();
+
+    // ANIMATION LOOP
+
     // RUN THE ANIMATION LOOP
-    animate();
+    // render();
   };
 };
 
