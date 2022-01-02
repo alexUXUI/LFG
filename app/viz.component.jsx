@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
 
+import "../css/audioviz.css";
+
 export const AudioVisualizer = () => {
   const [playing, setPlaying] = React.useState(true);
 
@@ -33,7 +35,6 @@ export const AudioVisualizer = () => {
           )}
         </div>
       </div>
-      <canvas id="three-root" />
     </div>
   );
 };

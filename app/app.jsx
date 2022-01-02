@@ -2,7 +2,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {
-  Link,
   MakeGenerics,
   Outlet,
   ReactLocation,
@@ -41,7 +40,6 @@ function App() {
   return (
     // Build our routes and render our router
     <Router location={location} routes={routes}>
-      <Link to="/">Home</Link>
       <Outlet />{" "}
       {/* Start rendering router matches this is the window where all the routes get rendered*/}
       <ReactLocationDevtools initialIsOpen={false} />
