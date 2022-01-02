@@ -54,6 +54,31 @@ const analyser = audioManager.analyser();
 
 export const runViz = (playing) => {
   scene.background = new THREE.Color(sceneConfig.background);
+  scene.add(pointsMesh);
+
+  // Make Particle System
+  const particlesGeometry = new THREE.BufferGeometry;
+  const particlesCount = 5000;
+
+  // x, y, z for all particles
+  const positionArray = new Float32Array(particlesCount * 3);
+
+  for (let i = 0; i < particlesCount * 3; i++) {
+    positionArray[i] = Math.random();
+  }
+
+  console.log(positionArray);
+
+  particlesGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positionArray, 3)
+  );
+
+  const pointsMaterial = new THREE.PointsMaterial({
+    size: 0.1,
+  });
+
+  const pointsMesh = new THREE.Points(particlesGeometry, pointsMaterial);
 
   const controls = new OrbitControls(camera, renderer.domElement);
 

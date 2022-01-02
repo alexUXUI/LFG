@@ -9,7 +9,7 @@ const cameraConfig = {
   fieldOfView: 50,
   aspectRatio: window.innerWidth / window.innerHeight,
   near: 0.1,
-  far: 1000,
+  far: 10000,
   x: 0,
   y: 20,
   z: 35,

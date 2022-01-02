@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
 import { Link } from "react-location";
+import motzart from "../audio/motzart.mp3";
 
 import "../css/audioviz.css";
 
