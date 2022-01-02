@@ -11,6 +11,9 @@ const config = {
   detail: 10,
   geometry: ["IcosahedronBufferGeometry", "DodecahedronBufferGeometry"],
   selectedGeometry: 0,
+  damping: 1,
+  waveCoefficient: 3,
+  timeCoefficient: 300,
 };
 
 const { geometry: cGeometry, selectedGeometry, size, detail } = config;
@@ -54,15 +57,23 @@ const normals = JSON.parse(
   JSON.stringify(icosahedron.geometry.attributes.normal.array)
 );
 
-const damping = 1;
-
 // Animate
 export function animateIcosahedron(avgFrequency, frequencyData) {
+  const {
+    waveCoefficient,
+    damping,
+    xAngleFunction,
+    yAngleFunction,
+    timeCoefficient,
+  } = config;
+
   const {
     geometry: { attributes },
   } = icosahedron;
 
-  const now = Date.now() / 300;
+  // console.log(avgFrequency);
+
+  const now = Date.now() / timeCoefficient;
 
   for (let i = 0; i < count; i++) {
     const ix = i * 3;
@@ -70,15 +81,17 @@ export function animateIcosahedron(avgFrequency, frequencyData) {
     const iz = i * 3 + 2;
 
     // use uvs to calculate wave
-    const uX = (attributes.uv.getX(i) * Math.PI * avgFrequency) / 3;
-    const uY = (attributes.uv.getY(i) * Math.PI * avgFrequency) / 3;
+    const uX =
+      (attributes.uv.getX(i) * Math.PI * avgFrequency) / waveCoefficient;
+    const uY =
+      (attributes.uv.getY(i) * Math.PI * avgFrequency) / waveCoefficient;
 
     // calculate current vertex wave height
     const xangle = uX + now;
-    const xsin = Math[config.xAngleFunction](xangle) * damping;
+    const xsin = Math[xAngleFunction](xangle) * damping;
 
     const yangle = uY + now;
-    const ycos = Math[config.yAngleFunction](yangle) * damping;
+    const ycos = Math[yAngleFunction](yangle) * damping;
 
     // set new position
     attributes.position.setX(i, position[ix] + normals[ix] * (xsin + ycos));
@@ -93,13 +106,16 @@ export function animateIcosahedron(avgFrequency, frequencyData) {
 icosahedron.position.set(0, 0, 0);
 
 // Dat GUI config
-// const icosahedronFolder = gui.addFolder("Icosahedron");
+const icosahedronFolder = gui.addFolder("Icosahedron");
 // Function to update the vertice positions
-// const angleOptions = {
-//   sin: "sin",
-//   cos: "cos",
-//   tanh: "tanh",
-//   tan: "tan",
-// };
-// gui.add(config, "xAngleFunction", angleOptions);
-// gui.add(config, "yAngleFunction", angleOptions);
+const angleOptions = {
+  sin: "sin",
+  cos: "cos",
+  tanh: "tanh",
+  tan: "tan",
+};
+
+icosahedronFolder.add(config, "xAngleFunction", angleOptions);
+icosahedronFolder.add(config, "yAngleFunction", angleOptions);
+icosahedronFolder.add(config, "damping").min(0).max(10).step(0.1);
+icosahedronFolder.add(config, "waveCoefficient").min(0).max(10).step(0.1);

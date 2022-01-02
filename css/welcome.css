@@ -50,6 +50,23 @@ p {
 #welcome button {
   margin-top: 40px;
   font-size: 30px;
+  transition: all 0.2s ease-in-out;
+}
+
+#welcome button:hover {
+  background: rgb(9, 196, 109);
+  color: black;
+  cursor: pointer;
+}
+
+.nav-link {
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  background: rgb(9, 196, 109);
+  color: black;
+  cursor: pointer;
 }
 
 .item {
@@ -61,5 +78,4 @@ p {
   flex-direction: column;
   align-items: center;
   margin-top: 200px;
-  /* justify-content: center; */
 }
