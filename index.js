@@ -33,6 +33,8 @@ export const scene = new THREE.Scene();
 export const runViz = (playing) => {
   scene.background = new THREE.Color(0x000000);
 
+  const controls = new OrbitControls(camera, renderer.domElement);
+
   // ADD HELPERS TO SCENE
   const allHelpers = (scene) => {
     scene.add(axesHelper);
@@ -57,8 +59,6 @@ export const runViz = (playing) => {
   var file = document.getElementById("thefile");
   var audio = document.getElementById("audio");
   file.onchange = function () {
-    // const controls = new OrbitControls(camera, renderer);
-
     var files = this.files;
     audio.src = URL.createObjectURL(files[0]);
 
