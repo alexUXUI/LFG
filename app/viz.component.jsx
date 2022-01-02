@@ -33,6 +33,7 @@ export const AudioVisualizer = () => {
           )}
         </div>
       </div>
+      <canvas id="three-root" />
     </div>
   );
 };
