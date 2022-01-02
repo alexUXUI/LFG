@@ -31,8 +31,8 @@
 }
 
 #content .custom-file-upload:hover {
-  color: #fff;
-  background: rgb(14, 45, 114);
+  background: rgb(9, 196, 109);
+  color: black;
   cursor: pointer;
 }
 
