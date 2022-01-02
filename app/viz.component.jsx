@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useAudioVisualizer } from "./hooks/visualizer.hook";
+import { Link } from "react-location";
 
 import "../css/audioviz.css";
 
@@ -24,6 +25,7 @@ export const AudioVisualizer = () => {
         <div id="content">
           {playing ? (
             <>
+              <Link to="/">Home</Link>
               <label className="custom-file-upload">
                 Select MP3
                 <input type="file" id="thefile" accept="audio/*" />

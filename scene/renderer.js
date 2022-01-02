@@ -55,3 +55,8 @@ export class RendererManager {
 }
 
 export const Renderer = new RendererManager();
+
+export const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+const container = document.getElementById("screen--start");
+container.appendChild(renderer.domElement);

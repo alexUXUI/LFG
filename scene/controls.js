@@ -4,7 +4,4 @@ import { camera } from "./camera.js";
 import { Renderer, renderer } from "./renderer.js";
 
 // CONTROLS
-export const controls = new OrbitControls(
-  camera,
-  Renderer.getOrCreateDOMElement()
-);
+export const controls = new OrbitControls(camera, renderer);

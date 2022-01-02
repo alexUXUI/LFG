@@ -42,7 +42,7 @@ function App() {
     <Router location={location} routes={routes}>
       <Outlet />{" "}
       {/* Start rendering router matches this is the window where all the routes get rendered*/}
-      <ReactLocationDevtools initialIsOpen={false} />
+      {/* <ReactLocationDevtools initialIsOpen={false} /> */}
     </Router>
   );
 }
