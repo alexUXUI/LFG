@@ -7,14 +7,26 @@ import "../css/audioviz.css";
 export const AudioVisualizer = () => {
   const [file, setFile] = React.useState(undefined);
   const [isAudioPlaying, setIsAudioPlaying] = React.useState(false);
+
   useAudioVisualizer();
 
   let style = !isAudioPlaying ? "cta" : "";
+
   return (
     <div id="screen--start">
       <div className="audioVisualizer">
         <div id="content">
-          <Link className="nav-link" to="/">
+          <Link
+            className="nav-link"
+            to="/"
+            getActiveProps={() => {
+              return {
+                style: {
+                  fontWeight: "bold",
+                },
+              };
+            }}
+          >
             Home
           </Link>
 
@@ -45,7 +57,7 @@ export const AudioVisualizer = () => {
             id="audio"
             controls
             onEnded={(data) => {
-              // window.stopAnimation();
+              window.stopAnimation();
               console.log("AUDIO END");
               setIsAudioPlaying(false);
             }}

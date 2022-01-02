@@ -42,7 +42,8 @@ export const scene = new THREE.Scene();
 
 const sceneConfig = {
   ambientLight: 0xffffff,
-  background: 0xffffff,
+  background: 0x000000,
+  withHelpers: false,
 };
 
 // Refs to audio and file HTML elements
@@ -51,26 +52,10 @@ const audio = document.getElementById("audio");
 const audioManager = new AudioManager(audio);
 const analyser = audioManager.analyser();
 
-const config = gui.addFolder("Scene");
-
-config.addColor(sceneConfig, "background").onChange(function (value) {
-  scene.background.set(value);
-});
-
 export const runViz = (playing) => {
   scene.background = new THREE.Color(sceneConfig.background);
 
   const controls = new OrbitControls(camera, renderer.domElement);
-
-  // ADD HELPERS TO SCENE
-  const allHelpers = (scene) => {
-    scene.add(axesHelper);
-    scene.add(warmLightHelper);
-    scene.add(coolLightHelper);
-    scene.add(gridHelper);
-  };
-
-  // allHelpers(scene);
 
   // ADD LIGHTS TO SCENE
   scene.add(warmLight);
@@ -137,3 +122,31 @@ export const runViz = (playing) => {
     start();
   };
 };
+
+const config = gui.addFolder("Scene");
+
+config.add(sceneConfig, "withHelpers").onChange((value) => {
+  if (value) {
+    scene.add(axesHelper);
+    scene.add(gridHelper);
+    scene.add(warmLightHelper);
+    scene.add(coolLightHelper);
+  } else {
+    scene.remove(axesHelper);
+    scene.remove(gridHelper);
+    scene.remove(warmLightHelper);
+    scene.remove(coolLightHelper);
+  }
+});
+
+config.addColor(sceneConfig, "background").onChange(function (value) {
+  scene.background.set(value);
+  const audioVisualizer = document.querySelector(".audioVisualizer");
+
+  // convert value to hexadecimal
+  const hex = value.toString(16);
+  // add hash to hexadecimal
+  const hexWithHash = "#" + hex;
+  // set background color
+  audioVisualizer.style.backgroundColor = hexWithHash;
+});
