@@ -3,25 +3,28 @@ import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 // LIGHTS
-import { warmLightHelper, warmLight } from "./scene/lights/warm-light.js";
-import { coolLightHelper, coolLight } from "./scene/lights/cool-light.js";
-import { axesHelper, gridHelper } from "./scene/helpers.js";
+import { warmLightHelper, warmLight } from "./old/scene/lights/warm-light.js";
+import {
+  coolLightHelper,
+  coolLight,
+} from "./old/scene/lights/cool-light.js.js";
+import { axesHelper, gridHelper } from "./old/scene/helpers.js.js";
 
 // CAMERA
-import { camera, rotateCameraAroundScene } from "./scene/camera.js";
+import { camera, rotateCameraAroundScene } from "./old/scene/camera.js.js";
 
 // SCENE COMPONENTS
 import {
   animateIcosahedron,
   icosahedron,
   renderIcosahedron,
-} from "./scene/components/icosahedron.js";
+} from "./old/scene/components/icosahedron.js.js";
 
 // DATA TRANSFORMERS
 import { prepareIcosahedron } from "./transformer/icosahedron.js";
 
 // AUDIO
-import { AudioManager, MicrophoneManager } from "./scene/audio.js";
+import { AudioManager, MicrophoneManager } from "./old/scene/audio.js.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // POST PROCESSING
@@ -30,7 +33,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
 
 // Dat GUI
-import { gui } from "./scene/dat.gui.js";
+import { gui } from "./old/scene/dat.gui.js.js";
 
 // Renderer
 export let renderer = new THREE.WebGLRenderer();
