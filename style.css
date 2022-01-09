@@ -26,3 +26,22 @@ audio {
   right: 0;
   z-index: 100;
 }
+
+.getStartedButton {
+  color: black;
+  /* position button in the center of the screen */
+  position: fixed;
+  border: 1px solid black;
+  top: 50%;
+  left: 50%;
+  padding: 1em;
+  font-size: 1em;
+  border-radius: 0.25em;
+}
+
+.getStartedButton:hover {
+  background: black;
+
+  color: white;
+  cursor: pointer;
+}
