@@ -1,4 +1,4 @@
-console.log("loaded!");
+import styles from "./style.css";
 
 document.body.addEventListener("click", (e) => {
   console.log("click!");

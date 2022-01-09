@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const devServer = {
   port: 8082,
@@ -8,6 +9,11 @@ const devServer = {
   historyApiFallback: {
     index: "index.html",
   },
+};
+
+const PATHS = {
+  src: path.join(__dirname, "src"), //absolute path to RepoDir/src
+  dist: path.join(__dirname, "dist"), //absolute path to RepoDir/dist
 };
 
 module.exports = {
@@ -35,7 +41,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              publicPath: "css",
+              esModule: false,
+            },
+          },
+        ],
       },
     ],
   },
