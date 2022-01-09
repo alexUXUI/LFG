@@ -1,6 +1,4 @@
 import { createAudio } from "./file-audio/audio.js";
-import { start, stop } from "./file-audio/animation.js";
-
 import { initMic } from "./mic-audio/microphone.js";
 
 // handle the window onload event

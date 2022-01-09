@@ -1,18 +1,19 @@
 import { ctx, canvas } from "../canvas.js";
-export { analyserNode, bufferLength, freqDomain } from "./microphone.js";
 import {
   requestAnimationFrame,
   cancelAnimationFrame,
   animation,
 } from "./render-loop.js";
+export { analyserNode, bufferLength, freqDomain } from "./microphone.js";
 
 // const bufferLength = analyserNode.frequencyBinCount;
 // const freqDomain = new Uint8Array(bufferLength);
 
-export function renderFrame() {
+export function renderFrame(scriptNode) {
   animation.id = requestAnimationFrame(renderFrame);
 
   console.log("renderFrame");
+  console.log(scriptNode);
   // // clear the canvas
   // ctx.fillStyle = "#000";
   // ctx.fillRect(0, 0, canvas.width, canvas.height);

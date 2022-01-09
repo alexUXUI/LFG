@@ -21,8 +21,8 @@ export function stop() {
 }
 
 // start the animation loop
-export function start() {
+export function start(scriptNode) {
   console.log("start");
-
-  renderFrame();
+  console.log(scriptNode);
+  renderFrame(scriptNode);
 }
