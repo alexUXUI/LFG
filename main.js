@@ -16,7 +16,3 @@ function handleGetStartedButtonClick() {
     document.body.removeChild(getStartedButton);
   });
 }
-
-// document.body.addEventListener("click", (e) => {
-//   console.log("click!");
-// });

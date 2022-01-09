@@ -29,7 +29,6 @@ audio {
 
 .getStartedButton {
   color: black;
-  /* position button in the center of the screen */
   position: fixed;
   border: 1px solid black;
   top: 50%;
@@ -41,7 +40,6 @@ audio {
 
 .getStartedButton:hover {
   background: black;
-
   color: white;
   cursor: pointer;
 }
