@@ -2,25 +2,24 @@ console.log("audio is starting up ...");
 
 import { start, stop } from "./render-loop.js";
 
-const BUFF_SIZE_RENDERER = 16384;
 const audioContext = new AudioContext();
 
-let audioInput = null;
+const BUFF_SIZE_RENDERER = 16384;
+
 let micStream = null;
 
 let gainNode = audioContext.createGain();
 gainNode.connect(audioContext.destination);
 
-let scriptProcessorNode = null;
-let scriptProcessorAnalysisNode = null;
+let scriptNode = null;
 
-let analyserNode = audioContext.createAnalyser();
+const analyserNode = audioContext.createAnalyser();
 analyserNode.smoothingTimeConstant = 0;
 analyserNode.fftSize = 2048;
 
 const bufferLength = analyserNode.frequencyBinCount;
 const freqDomain = new Uint8Array(bufferLength);
-const array_time_domain = new Uint8Array(bufferLength);
+const timeDomain = new Uint8Array(bufferLength);
 
 if (!navigator.getUserMedia)
   navigator.getUserMedia =
@@ -37,14 +36,6 @@ export function initMic(stream) {
         micStream = audioContext.createMediaStreamSource(stream);
         micStream.connect(gainNode);
 
-        scriptProcessorNode = audioContext.createScriptProcessor(
-          BUFF_SIZE_RENDERER,
-          1,
-          1
-        );
-
-        micStream.connect(scriptProcessorNode);
-
         // pause the stream
         micStream.mediaStream.getAudioTracks()[0].enabled = false;
 
@@ -55,22 +46,18 @@ export function initMic(stream) {
             gainNode.gain.value = curr_volume;
           });
 
-        scriptProcessorAnalysisNode = audioContext.createScriptProcessor(
-          2048,
-          1,
-          1
-        );
+        scriptNode = audioContext.createScriptProcessor(2048, 1, 1);
 
-        scriptProcessorAnalysisNode.connect(gainNode);
+        scriptNode.connect(gainNode);
 
         micStream.connect(analyserNode);
 
-        analyserNode.connect(scriptProcessorAnalysisNode);
+        analyserNode.connect(scriptNode);
 
-        scriptProcessorAnalysisNode.onaudioprocess = function () {
+        scriptNode.onaudioprocess = function () {
           // get the average for the first channel
           analyserNode.getByteFrequencyData(freqDomain);
-          analyserNode.getByteTimeDomainData(array_time_domain);
+          analyserNode.getByteTimeDomainData(timeDomain);
 
           // console.log(freqDomain);
         };
@@ -103,4 +90,4 @@ export function initMic(stream) {
   }
 }
 
-export { analyserNode, bufferLength, freqDomain };
+export { analyserNode, bufferLength, freqDomain, scriptNode };

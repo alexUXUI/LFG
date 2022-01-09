@@ -23,5 +23,6 @@ export function stop() {
 // start the animation loop
 export function start() {
   console.log("start");
+
   renderFrame();
 }

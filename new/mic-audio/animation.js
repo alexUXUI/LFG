@@ -11,29 +11,29 @@ import {
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);
-  analyserNode.getByteFrequencyData(freqDomain);
 
-  // clear the canvas
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  console.log("renderFrame");
+  // // clear the canvas
+  // ctx.fillStyle = "#000";
+  // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // x is for the bar offset on X axis
-  let x = 0;
+  // // x is for the bar offset on X axis
+  // let x = 0;
 
-  // placeholder for bar height
-  let barHeight;
+  // // placeholder for bar height
+  // let barHeight;
 
-  // the width of each bar
-  let barWidth = (canvas.width / bufferLength) * 2.5;
+  // // the width of each bar
+  // let barWidth = (canvas.width / bufferLength) * 2.5;
 
-  // for each frequency bin in the array
-  // loop through the freqDomain and draw a bar
-  // then increment the x position by the bar width
-  for (var i = 0; i < bufferLength; i++) {
-    barHeight = freqDomain[i];
-    paintBar(i, barHeight, bufferLength, x);
-    x += barWidth + 1;
-  }
+  // // for each frequency bin in the array
+  // // loop through the freqDomain and draw a bar
+  // // then increment the x position by the bar width
+  // for (var i = 0; i < bufferLength; i++) {
+  //   barHeight = freqDomain[i];
+  //   paintBar(i, barHeight, bufferLength, x);
+  //   x += barWidth + 1;
+  // }
 }
 
 // paint the bar depending on the freuqency amplitude for the height
