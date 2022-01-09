@@ -18,22 +18,25 @@ function handleStream(stream) {
   micStream = micCtx.createMediaStreamSource(stream);
 
   micStream.connect(analyser);
+
+  // uncomment to hear mic output from speakers
   // analyser.connect(micCtx.destination);
 
-  // mic.mediaStream.getAudioTracks()[0].enabled = false;
-
-  // function play() {
-  //   analyser.getByteFrequencyData(data);
-  //   console.log(data);
-  //   requestAnimationFrame(play);
-  // }
-
-  // play();
+  // uncomment to pause mic
+  // micStream.mediaStream.getAudioTracks()[0].enabled = false;
 
   start();
 }
 
 export function startMic() {
+  // disable mic start button
+  const startBtn = document.getElementById("micStart");
+  startBtn.disabled = true;
+
+  // enable stop mic btn
+  const stopBtn = document.getElementById("micStop");
+  stopBtn.disabled = false;
+
   return navigator.getUserMedia(
     { video: false, audio: true },
     handleStream,
@@ -46,12 +49,21 @@ export function handleMicStop() {
     micStream.disconnect();
     micStream = undefined;
     stop();
+
+    // enable mic start button
+    const startBtn = document.getElementById("micStart");
+    startBtn.disabled = false;
+
+    // disable stop mic btn
+    const stopBtn = document.getElementById("micStop");
+    stopBtn.disabled = true;
   }
 }
 
 export function initMic() {
   // create a button to start the mic and append it to a div with id of "mic"
   const micButton = document.createElement("button");
+  micButton.setAttribute("id", "micStart");
   micButton.innerText = "Start Mic";
   micButton.addEventListener("click", startMic);
 
@@ -61,80 +73,11 @@ export function initMic() {
 
   // create a button to stop the mic and append it to the DOM
   const stopMicButton = document.createElement("button");
+  stopMicButton.setAttribute("id", "micStop");
   stopMicButton.innerText = "Stop Mic";
   stopMicButton.addEventListener("click", handleMicStop);
+  stopMicButton.disabled = true;
   mic.appendChild(stopMicButton);
 }
 
-const yo = "yo";
-
-// export { micCtx, analyser, data, yo };
-
 export { analyser, bufferLength, dataArray };
-
-// const audioContext = new AudioContext();
-
-// const BUFF_SIZE_RENDERER = 16384;
-
-// let micStream = null;
-
-// let gainNode = audioContext.createGain();
-// gainNode.connect(audioContext.destination);
-
-// const analyserNode = audioContext.createAnalyser();
-// analyserNode.smoothingTimeConstant = 0;
-// analyserNode.fftSize = 2048;
-
-// const bufferLength = analyserNode.frequencyBinCount;
-// const freqDomain = new Uint8Array(bufferLength);
-// const timeDomain = new Uint8Array(bufferLength);
-
-// const scriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-
-// scriptNode.connect(gainNode);
-
-// if (!navigator.getUserMedia)
-//   navigator.getUserMedia =
-//     navigator.getUserMedia ||
-//     navigator.webkitGetUserMedia ||
-//     navigator.mozGetUserMedia ||
-//     navigator.msGetUserMedia;
-
-// function handleStream(stream) {
-//   micStream = audioContext.createMediaStreamSource(stream);
-//   micStream.connect(gainNode);
-
-//   // pause the stream
-//   micStream.mediaStream.getAudioTracks()[0].enabled = false;
-
-//   micStream.connect(analyserNode);
-
-//   analyserNode.connect(scriptNode);
-
-//   scriptNode.onaudioprocess = function (e) {
-//     analyserNode.getByteTimeDomainData(timeDomain);
-//     analyserNode.getByteFrequencyData(freqDomain);
-//     // console.log(freqDomain);
-//   };
-// }
-
-// function handleError(error) {
-//   console.error("Error capturing audio.");
-// }
-
-// export function initMic(stream) {
-//   if (navigator.getUserMedia) {
-//     navigator.getUserMedia({ audio: true }, handleStream, handleError);
-//   } else {
-//     console.error("getUserMedia not supported in this browser.");
-//   }
-// }
-
-// console.log(scriptNode);
-// export { analyserNode, bufferLength, freqDomain, scriptNode };
-
-// // buttons and UI
-// document.getElementById("volume").addEventListener("change", function () {
-//   var curr_volume = this.value;
-//   gainNode.gain.value = curr_volume;
-// });
