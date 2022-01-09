@@ -1,15 +1,26 @@
+import { start, stop } from "./animation.js";
+
 export function createAudio() {
-  // create audio element and append it to the body
+  // create audio element
   const audio = document.createElement("audio");
+
+  // append it to the body
   document.body.appendChild(audio);
 
   // set the audio element attributes
   audio.setAttribute("controls", "controls");
   audio.setAttribute("preload", "auto");
-  //   audio.setAttribute("src", "./audio/motzart.mp3");
   audio.setAttribute("type", "audio/mpeg");
   audio.setAttribute("id", "audio");
   audio.setAttribute("class", "audio");
+
+  // when the audio is paused, stop the animation
+  audio.addEventListener("pause", stop);
+
+  // when the audio is playing, start the animation
+  audio.addEventListener("play", start);
+
+  // keep audio above the canvas
   audio.style.zIndex = 100;
 }
 
