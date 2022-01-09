@@ -4,7 +4,7 @@ import {
   requestAnimationFrame,
   cancelAnimationFrame,
   animation,
-} from "../render-loop.js";
+} from "./render-loop.js";
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);

@@ -1,5 +1,4 @@
-import { renderFrame } from "./file-audio/animation.js";
-import { analyser, bufferLength } from "./file-audio/audio.js";
+import { renderFrame } from "./animation.js";
 
 export const animation = {
   id: undefined,
@@ -16,16 +15,13 @@ export const cancelAnimationFrame =
   window.mozCancelAnimationFrame;
 
 // stop the animation loop
-export function stop(e) {
-  e.preventDefault();
+export function stop() {
   console.log("stop");
   cancelAnimationFrame(animation.id);
 }
 
 // start the animation loop
-export function start(e) {
-  e.preventDefault();
+export function start() {
   console.log("start");
-
-  renderFrame(analyser);
+  renderFrame();
 }

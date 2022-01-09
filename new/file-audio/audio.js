@@ -1,4 +1,4 @@
-import { start, stop } from "../render-loop.js";
+import { start, stop } from "./render-loop.js";
 
 // Audio element set up
 export function createAudio() {

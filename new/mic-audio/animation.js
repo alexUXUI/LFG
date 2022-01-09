@@ -1,17 +1,17 @@
 import { ctx, canvas } from "../canvas.js";
-// import { analyser, bufferLength, dataArray } from "./microphone";
+export { analyserNode, bufferLength, freqDomain } from "./microphone.js";
 import {
   requestAnimationFrame,
   cancelAnimationFrame,
   animation,
-} from "../render-loop.js";
+} from "./render-loop.js";
 
-// const bufferLength = analyser.frequencyBinCount;
-// const dataArray = new Uint8Array(bufferLength);
+// const bufferLength = analyserNode.frequencyBinCount;
+// const freqDomain = new Uint8Array(bufferLength);
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);
-  analyser.getByteFrequencyData(dataArray);
+  analyserNode.getByteFrequencyData(freqDomain);
 
   // clear the canvas
   ctx.fillStyle = "#000";
@@ -27,10 +27,10 @@ export function renderFrame() {
   let barWidth = (canvas.width / bufferLength) * 2.5;
 
   // for each frequency bin in the array
-  // loop through the dataArray and draw a bar
+  // loop through the freqDomain and draw a bar
   // then increment the x position by the bar width
   for (var i = 0; i < bufferLength; i++) {
-    barHeight = dataArray[i];
+    barHeight = freqDomain[i];
     paintBar(i, barHeight, bufferLength, x);
     x += barWidth + 1;
   }
