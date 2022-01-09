@@ -1,8 +1,12 @@
 import { createAudio } from "./audio.js";
 import { start, stop } from "./animation.js";
 
+import { initMic } from "./microphone.js";
+
 // handle the window onload event
 export function handleOnLoad() {
+  initMic();
+
   const { file, audio } = getAudioAndFile();
 
   file.onchange = function () {
