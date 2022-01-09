@@ -1,6 +1,6 @@
 let audioCtx;
 
-export function initMic() {
+export function createtMic() {
   const getMicInput = () => {
     return navigator.mediaDevices.getUserMedia({
       audio: {
@@ -89,3 +89,5 @@ export function initMic() {
   suspendMicButton.addEventListener("click", handleMicSuspend);
   mic.appendChild(suspendMicButton);
 }
+
+// analyser, bufferLength, dataArray

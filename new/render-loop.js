@@ -1,5 +1,5 @@
-import { renderFrame } from "./animation.js";
-import { analyser, bufferLength } from "./audio.js";
+import { renderFrame } from "./file-audio/animation.js";
+import { analyser, bufferLength } from "./file-audio/audio.js";
 
 export const animation = {
   id: undefined,

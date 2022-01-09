@@ -1,11 +1,11 @@
-import { createAudio } from "./audio.js";
-import { start, stop } from "./animation.js";
+import { createAudio } from "./file-audio/audio.js";
+import { start, stop } from "./file-audio/animation.js";
 
-import { initMic } from "./microphone.js";
+import { createtMic } from "./mic-audio/microphone.js";
 
 // handle the window onload event
 export function handleOnLoad() {
-  initMic();
+  createtMic();
 
   const { file, audio } = getAudioAndFile();
 
