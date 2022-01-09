@@ -1,30 +1,34 @@
 import { start, stop } from "./render-loop.js";
 
+// interface that allos us to ask the browser to use the mic
 navigator.getUserMedia =
   navigator.getUserMedia ||
   navigator.webkitGetUserMedia ||
   navigator.mozGetUserMedia;
 
+// mic audio context
 const micCtx = new AudioContext();
+
+// mic audio analyser
 const analyser = micCtx.createAnalyser();
 analyser.fftSize = 2048;
 
+// analyser data
 const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
 
+// the mic audio stream
 let micStream = undefined;
 
+// gets called when the browser agrees to let the user have the mic
 function handleStream(stream) {
+  // connects the mic stream to the audio context
   micStream = micCtx.createMediaStreamSource(stream);
 
+  // connects the mic stream to the analyser
   micStream.connect(analyser);
 
-  // uncomment to hear mic output from speakers
-  // analyser.connect(micCtx.destination);
-
-  // uncomment to pause mic
-  // micStream.mediaStream.getAudioTracks()[0].enabled = false;
-
+  // start the animation loop
   start();
 }
 
@@ -37,6 +41,7 @@ export function startMic() {
   const stopBtn = document.getElementById("micStop");
   stopBtn.disabled = false;
 
+  // get the audio stream from the browser mic
   return navigator.getUserMedia(
     { video: false, audio: true },
     handleStream,
