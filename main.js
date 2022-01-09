@@ -1,4 +1,4 @@
-import { handleOnLoad } from "./init.js";
+import { handleOnLoad } from "./new/init.js";
 
 window.onload = function () {
   handleOnLoad();

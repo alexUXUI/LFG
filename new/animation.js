@@ -1,10 +1,10 @@
 import { ctx, canvas } from "./canvas.js";
+import { analyser, bufferLength, dataArray } from "./audio.js";
 import {
   requestAnimationFrame,
   cancelAnimationFrame,
   animation,
 } from "./render-loop.js";
-import { analyser, bufferLength, dataArray } from "./audio.js";
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);
