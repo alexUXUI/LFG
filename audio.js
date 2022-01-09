@@ -1,42 +1,3 @@
-// // create an audio element and append it to the body
-// // const audio = document.createElement("audio");
-// var audio = document.querySelector("audio");
-// // document.body.appendChild(audio);
-
-// // set the audio element attributes
-// audio.setAttribute("controls", "controls");
-// // audio.setAttribute("autoplay", "autoplay");
-// audio.setAttribute("preload", "auto");
-// audio.setAttribute("src", "./audio/motzart.mp3");
-// audio.setAttribute("type", "audio/mpeg");
-// audio.setAttribute("id", "audio");
-// audio.setAttribute("class", "audio");
-
-// // create audio context and connect it to the audio element
-// const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-// const source = audioCtx.createMediaElementSource(audio);
-// source.connect(audioCtx.destination);
-
-// // get the frequency data from the audio element
-// const analyser = audioCtx.createAnalyser();
-// analyser.fftSize = 2048;
-// const bufferLength = analyser.frequencyBinCount;
-// const dataArray = new Uint8Array(bufferLength);
-
-// console.log("audioCtx", audioCtx);
-
-// const stop = (e) => {
-//   e.preventDefault();
-//   console.log("stop");
-//   cancelAnimationFrame(animationId);
-// };
-
-// const start = (e) => {
-//   e.preventDefault();
-//   console.log("start");
-//   runAnimationLoop();
-// };
-
 // create a variable for a frame animation id
 let animationId;
 
@@ -51,11 +12,43 @@ const cancelAnimationFrame =
   window.webkitCancelAnimationFrame ||
   window.mozCancelAnimationFrame;
 
-function runAnimationLoop() {
+function runAnimationLoop(analyser) {
   // get the frequency data
 
+  // is half of the analyser fftsize
+  var bufferLength = analyser.frequencyBinCount;
+  var dataArray = new Uint8Array(bufferLength);
+
+  var WIDTH = canvas.width;
+  var HEIGHT = canvas.height;
+
+  var barWidth = (WIDTH / bufferLength) * 2.5;
+  var barHeight;
+  var x = 0;
+
+  function renderFrame() {
+    animationId = requestAnimationFrame(renderFrame);
+
+    x = 0;
+
+    analyser.getByteFrequencyData(dataArray);
+
+    console.log(dataArray);
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    for (var i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+      paintBar(i, barHeight, bufferLength, x);
+      x += barWidth + 1;
+    }
+  }
+
+  renderFrame();
+
   // request another frame
-  animationId = requestAnimationFrame(runAnimationLoop);
+  //   animationId = requestAnimationFrame(runAnimationLoop);
 }
 
 function createAudio() {
@@ -66,7 +59,7 @@ function createAudio() {
   // set the audio element attributes
   audio.setAttribute("controls", "controls");
   audio.setAttribute("preload", "auto");
-  audio.setAttribute("src", "./audio/motzart.mp3");
+  //   audio.setAttribute("src", "./audio/motzart.mp3");
   audio.setAttribute("type", "audio/mpeg");
   audio.setAttribute("id", "audio");
   audio.setAttribute("class", "audio");
@@ -75,19 +68,17 @@ function createAudio() {
 
 createAudio();
 
+var context = new AudioContext();
+const _audio = document.getElementById("audio");
+var src = context.createMediaElementSource(_audio);
+var analyser = context.createAnalyser();
+
+src.connect(analyser);
+analyser.connect(context.destination);
+
+analyser.fftSize = 2048;
+
 function handleAudioData(files) {
-  const audio = document.getElementById("audio");
-  audio.src = URL.createObjectURL(files[0]);
-  audio.load();
-  var context = new AudioContext();
-  var src = context.createMediaElementSource(audio);
-  var analyser = context.createAnalyser();
-
-  src.connect(analyser);
-  analyser.connect(context.destination);
-
-  analyser.fftSize = 2048;
-
   return { analyser, src, context };
 }
 
@@ -141,7 +132,8 @@ function stop(e) {
 function start(e) {
   e.preventDefault();
   console.log("start");
-  runAnimationLoop();
+
+  runAnimationLoop(analyser);
 }
 
 function connectFileToAudio(files, audio) {
@@ -152,40 +144,6 @@ function connectFileToAudio(files, audio) {
 function handleFileChange(files) {
   const audio = document.getElementById("audio");
   connectFileToAudio(files, audio);
-
-  const { analyser, src, context } = handleAudioData(files);
-
-  // is half of the analyser fftsize
-  var bufferLength = analyser.frequencyBinCount;
-  var dataArray = new Uint8Array(bufferLength);
-
-  var WIDTH = canvas.width;
-  var HEIGHT = canvas.height;
-
-  var barWidth = (WIDTH / bufferLength) * 2.5;
-  var barHeight;
-  var x = 0;
-
-  function renderFrame() {
-    requestAnimationFrame(renderFrame);
-
-    x = 0;
-
-    analyser.getByteFrequencyData(dataArray);
-
-    // console.log(dataArray);
-
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-    for (var i = 0; i < bufferLength; i++) {
-      barHeight = dataArray[i];
-      paintBar(i, barHeight, bufferLength, x);
-      x += barWidth + 1;
-    }
-  }
-
-  renderFrame();
 }
 
 // when the audio is paused, stop the animation
