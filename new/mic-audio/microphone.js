@@ -29,7 +29,7 @@ function handleStream(stream) {
   micStream.connect(analyser);
 
   // start the animation loop
-  start();
+  start("./mic-audio/microphone.js");
 }
 
 export function startMic() {

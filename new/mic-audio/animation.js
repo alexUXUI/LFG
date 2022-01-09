@@ -1,18 +1,16 @@
 import { ctx, canvas } from "../canvas.js";
+import { analyser, bufferLength, dataArray } from "./microphone.js";
 import {
   requestAnimationFrame,
   cancelAnimationFrame,
   animation,
 } from "./render-loop.js";
-import { analyser, bufferLength, dataArray } from "./microphone.js";
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);
-
   analyser.getByteFrequencyData(dataArray);
-  // console.log("renderFrame");
-  // console.log(dataArray);
-  // // clear the canvas
+
+  // clear the canvas
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
