@@ -4,40 +4,35 @@ import {
   cancelAnimationFrame,
   animation,
 } from "./render-loop.js";
-// import { micCtx, analyser, data, yo } from "./microphone.js";
-
 import { analyser, bufferLength, dataArray } from "./microphone.js";
-
-// const bufferLength = 1024;
-// const freqDomain = new Uint8Array(bufferLength);
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);
 
   analyser.getByteFrequencyData(dataArray);
-  console.log("renderFrame");
-  console.log(dataArray);
+  // console.log("renderFrame");
+  // console.log(dataArray);
   // // clear the canvas
-  // ctx.fillStyle = "#000";
-  // ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // // x is for the bar offset on X axis
-  // let x = 0;
+  // x is for the bar offset on X axis
+  let x = 0;
 
-  // // placeholder for bar height
-  // let barHeight;
+  // placeholder for bar height
+  let barHeight;
 
-  // // the width of each bar
-  // let barWidth = (canvas.width / bufferLength) * 2.5;
+  // the width of each bar
+  let barWidth = (canvas.width / bufferLength) * 2.5;
 
-  // // for each frequency bin in the array
-  // // loop through the freqDomain and draw a bar
-  // // then increment the x position by the bar width
-  // for (var i = 0; i < bufferLength; i++) {
-  //   barHeight = freqDomain[i];
-  //   paintBar(i, barHeight, bufferLength, x);
-  //   x += barWidth + 1;
-  // }
+  // for each frequency bin in the array
+  // loop through the dataArray and draw a bar
+  // then increment the x position by the bar width
+  for (var i = 0; i < bufferLength; i++) {
+    barHeight = dataArray[i];
+    paintBar(i, barHeight, bufferLength, x);
+    x += barWidth + 1;
+  }
 }
 
 // paint the bar depending on the freuqency amplitude for the height
