@@ -1,18 +1,9 @@
-import { analyser } from "./audio.js";
 import { ctx, canvas } from "./canvas.js";
-
-// create a variable for a frame animation id
-let animationId;
-
-export const requestAnimationFrame =
-  window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame;
-
-export const cancelAnimationFrame =
-  window.cancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.mozCancelAnimationFrame;
+import {
+  requestAnimationFrame,
+  cancelAnimationFrame,
+  animation,
+} from "./render-loop.js";
 
 export function runAnimationLoop(analyser) {
   // is half of the analyser fftsize
@@ -27,7 +18,7 @@ export function runAnimationLoop(analyser) {
   var x = 0;
 
   function renderFrame() {
-    animationId = requestAnimationFrame(renderFrame);
+    animation.id = requestAnimationFrame(renderFrame);
 
     x = 0;
 
@@ -58,19 +49,4 @@ function paintBar(i, barHeight, bufferLength, x) {
 
   ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
   ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-}
-
-// stop the animation loop
-export function stop(e) {
-  e.preventDefault();
-  console.log("stop");
-  cancelAnimationFrame(animationId);
-}
-
-// start the animation loop
-export function start(e) {
-  e.preventDefault();
-  console.log("start");
-
-  runAnimationLoop(analyser);
 }
