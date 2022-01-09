@@ -1,4 +1,5 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const devServer = {
   port: 8082,
@@ -40,4 +41,9 @@ module.exports = {
   },
   devServer,
   devtool: "source-map", // high quality source maps
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./index.html",
+    }),
+  ],
 };

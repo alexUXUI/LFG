@@ -1,5 +1,8 @@
-import { handleOnLoad } from "./new/init.js";
+console.log("loaded!");
 
-window.onload = function () {
-  handleOnLoad();
-};
+document.body.addEventListener("click", (e) => {
+  console.log("click!");
+  import("./new/init.js").then(({ handleOnLoad }) => {
+    handleOnLoad();
+  });
+});

@@ -2,6 +2,7 @@
 export function handleOnLoad() {
   // Importing these will execute all the js in each file
   // which will init the audio file and mic funcitonality
+
   import("./file-audio/audio.js").then((initFileUpload) => {
     console.log("file audio init");
   });
