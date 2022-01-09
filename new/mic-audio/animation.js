@@ -1,10 +1,13 @@
 import { ctx, canvas } from "../canvas.js";
-import { analyser, bufferLength, dataArray } from "./microphone";
+// import { analyser, bufferLength, dataArray } from "./microphone";
 import {
   requestAnimationFrame,
   cancelAnimationFrame,
   animation,
 } from "../render-loop.js";
+
+// const bufferLength = analyser.frequencyBinCount;
+// const dataArray = new Uint8Array(bufferLength);
 
 export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);

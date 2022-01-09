@@ -1,93 +1,105 @@
-let audioCtx;
+export const initMic = () => {
+  const audioContext = new AudioContext();
 
-export function createtMic() {
-  const getMicInput = () => {
-    return navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: false,
-        noiseSuppression: true,
-        autoGainControl: true,
-        latency: 0,
+  console.log("audio is starting up ...");
+
+  const BUFF_SIZE_RENDERER = 16384;
+
+  const audioInput = null;
+  const micStream = null;
+  const gainNode = null;
+  const scriptProcessorNode = null;
+  const scriptProcessorAnalysisNode = null;
+  const analyserNode = null;
+
+  if (!navigator.getUserMedia)
+    navigator.getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia;
+
+  if (navigator.getUserMedia) {
+    navigator.getUserMedia(
+      { audio: true },
+      function (stream) {
+        startMic(stream);
       },
-      video: false,
-    });
-  };
-
-  async function setUpMicAudioContent() {
-    const micStream = audioCtx.createMediaStreamSource(micInput);
-    micStream.connect(gainNode);
-    oscillator.start();
+      (e) => console.error("Error capturing audio.")
+    );
+  } else {
+    console.error("getUserMedia not supported in this browser.");
   }
 
-  const handleMicStart = async (setAudioCtxState) => {
-    // create web audio api context
-    AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioCtx = new AudioContext();
+  function startMic(stream) {
+    gainNode = audioContext.createGain();
+    gainNode.connect(audioContext.destination);
 
-    const micAudioInput = await getMicInput();
+    micStream = audioContext.createMediaStreamSource(stream);
+    micStream.connect(gainNode);
 
-    const source = audioCtx.createMediaStreamSource(micAudioInput);
-    source.connect(audioCtx.destination);
+    scriptProcessorNode = audioContext.createScriptProcessor(
+      BUFF_SIZE_RENDERER,
+      1,
+      1
+    );
 
-    setAudioCtxState("running");
+    micStream.connect(scriptProcessorNode);
 
-    // report the state of the audio context to the
-    // console, when it changes
-    audioCtx.onstatechange = function () {
-      console.log(audioCtx.state);
+    // pause the stream
+    micStream.mediaStream.getAudioTracks()[0].enabled = false;
+
+    document.getElementById("volume").addEventListener("change", function () {
+      var curr_volume = this.value;
+      gainNode.gain.value = curr_volume;
+    });
+
+    scriptProcessorAnalysisNode = audioContext.createScriptProcessor(
+      2048,
+      1,
+      1
+    );
+
+    scriptProcessorAnalysisNode.connect(gainNode);
+
+    analyserNode = audioContext.createAnalyser();
+    analyserNode.smoothingTimeConstant = 0;
+    analyserNode.fftSize = 2048;
+
+    micStream.connect(analyserNode);
+
+    analyserNode.connect(scriptProcessorAnalysisNode);
+
+    var buffer_length = analyserNode.frequencyBinCount;
+
+    var array_freq_domain = new Uint8Array(buffer_length);
+    var array_time_domain = new Uint8Array(buffer_length);
+
+    scriptProcessorAnalysisNode.onaudioprocess = function () {
+      // get the average for the first channel
+      analyserNode.getByteFrequencyData(array_freq_domain);
+      analyserNode.getByteTimeDomainData(array_time_domain);
+
+      // console.log(array_freq_domain);
     };
-  };
 
-  const handleMicStop = () => {
-    if (audioCtx) {
-      console.log(audioCtx.state);
+    // get ref to a div with the id of mic
+    var microphone_element = document.getElementById("mic");
 
-      if (audioCtx.state !== "closed") {
-        audioCtx.close().then(function () {
-          console.log("Mic Audio context is now closed.");
-          setAudioCtxState("closed");
-        });
+    // create a button to start/stop the stream and append it to the DOM
+    var button = document.createElement("button");
+    button.innerHTML = "Start";
+    button.onclick = function () {
+      if (micStream.mediaStream.getAudioTracks()[0].enabled === false) {
+        micStream.mediaStream.getAudioTracks()[0].enabled = true;
+        button.innerHTML = "Stop";
+        console.log(micStream.mediaStream.getAudioTracks());
+      } else {
+        micStream.mediaStream.getAudioTracks()[0].enabled = false;
+        button.innerHTML = "Start";
+        console.log(micStream.mediaStream.getAudioTracks());
       }
-    }
-    console.warn("Mic Audio context DNE");
-  };
-
-  const handleMicSuspend = () => {
-    if (audioCtx?.state === "running") {
-      audioCtx.suspend().then(function () {
-        console.log("Mic Audio context is now suspended.");
-        setAudioCtxState("suspended");
-      });
-    } else if (audioCtx?.state === "suspended") {
-      audioCtx.resume().then(function () {
-        console.log("Mic Audio context is now resumed.");
-        setAudioCtxState("running");
-      });
-    }
-  };
-
-  // get a reference to a div with an id of "mic"
-  const mic = document.getElementById("mic");
-
-  // create a button to start the mic
-  const startMicButton = document.createElement("button");
-  startMicButton.innerText = "Start Mic";
-  startMicButton.addEventListener("click", handleMicStart);
-
-  // append the button to the div
-  mic.appendChild(startMicButton);
-
-  // create a button to stop the mic and append it to the DOM
-  const stopMicButton = document.createElement("button");
-  stopMicButton.innerText = "Stop Mic";
-  stopMicButton.addEventListener("click", handleMicStop);
-  mic.appendChild(stopMicButton);
-
-  // create a button to pause the mic and append it to the DOM
-  const suspendMicButton = document.createElement("button");
-  suspendMicButton.innerText = "Suspend Mic";
-  suspendMicButton.addEventListener("click", handleMicSuspend);
-  mic.appendChild(suspendMicButton);
-}
-
-// analyser, bufferLength, dataArray
+    };
+    microphone_element.appendChild(button);
+  }
+};
