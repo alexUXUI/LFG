@@ -1,4 +1,4 @@
-import { ctx, canvas } from "../canvas.js";
+import { ctx, canvas } from "../scene/canvas.js";
 import { analyser, bufferLength, dataArray } from "./microphone.js";
 import {
   requestAnimationFrame,
