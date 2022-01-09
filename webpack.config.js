@@ -12,7 +12,7 @@ const devServer = {
 module.exports = {
   mode: "development",
   // entry: ["regenerator-runtime/runtime.js", "./app/app.jsx"],
-  entry: ["regenerator-runtime/runtime.js", "./audio.js"],
+  entry: ["regenerator-runtime/runtime.js", "./main.js"],
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
