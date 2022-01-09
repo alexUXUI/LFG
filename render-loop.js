@@ -1,5 +1,5 @@
-import { analyser } from "./audio.js";
-import { runAnimationLoop } from "./animation.js";
+import { renderFrame } from "./animation.js";
+import { analyser, bufferLength } from "./audio.js";
 
 export const animation = {
   id: undefined,
@@ -14,6 +14,17 @@ export const cancelAnimationFrame =
   window.cancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
   window.mozCancelAnimationFrame;
+
+export function runAnimationLoop(analyser) {
+  var WIDTH = canvas.width;
+  var HEIGHT = canvas.height;
+
+  var barWidth = (WIDTH / bufferLength) * 2.5;
+  var barHeight;
+  var x = 0;
+
+  renderFrame();
+}
 
 // stop the animation loop
 export function stop(e) {

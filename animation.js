@@ -4,42 +4,30 @@ import {
   cancelAnimationFrame,
   animation,
 } from "./render-loop.js";
+import { analyser, bufferLength, dataArray } from "./audio.js";
 
-export function runAnimationLoop(analyser) {
-  // is half of the analyser fftsize
-  var bufferLength = analyser.frequencyBinCount;
-  var dataArray = new Uint8Array(bufferLength);
+export function renderFrame() {
+  animation.id = requestAnimationFrame(renderFrame);
 
-  var WIDTH = canvas.width;
-  var HEIGHT = canvas.height;
+  analyser.getByteFrequencyData(dataArray);
 
-  var barWidth = (WIDTH / bufferLength) * 2.5;
-  var barHeight;
-  var x = 0;
+  console.log(dataArray);
 
-  function renderFrame() {
-    animation.id = requestAnimationFrame(renderFrame);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    x = 0;
+  let x = 0;
+  let barHeight;
+  var barWidth = (canvas.width / bufferLength) * 2.5;
 
-    analyser.getByteFrequencyData(dataArray);
-
-    console.log(dataArray);
-
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-    for (var i = 0; i < bufferLength; i++) {
-      barHeight = dataArray[i];
-      paintBar(i, barHeight, bufferLength, x);
-      x += barWidth + 1;
-    }
+  for (var i = 0; i < bufferLength; i++) {
+    barHeight = dataArray[i];
+    paintBar(i, barHeight, bufferLength, x);
+    x += barWidth + 1;
   }
-
-  renderFrame();
 }
 
-function paintBar(i, barHeight, bufferLength, x) {
+export function paintBar(i, barHeight, bufferLength, x) {
   var WIDTH = canvas.width;
   var HEIGHT = canvas.height;
   var barWidth = (WIDTH / bufferLength) * 2.5;

@@ -56,4 +56,7 @@ function handleAudioAnalzer(files) {
 // these are global so that they dont get recreated over and over
 const { analyser, src, context } = handleAudioAnalzer();
 
-export { analyser };
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
+export { analyser, bufferLength, dataArray };
