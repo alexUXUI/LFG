@@ -4,16 +4,19 @@ import {
   cancelAnimationFrame,
   animation,
 } from "./render-loop.js";
-export { analyserNode, bufferLength, freqDomain } from "./microphone.js";
+// import { micCtx, analyser, data, yo } from "./microphone.js";
 
-// const bufferLength = analyserNode.frequencyBinCount;
+import { analyser, bufferLength, dataArray } from "./microphone.js";
+
+// const bufferLength = 1024;
 // const freqDomain = new Uint8Array(bufferLength);
 
-export function renderFrame(scriptNode) {
+export function renderFrame() {
   animation.id = requestAnimationFrame(renderFrame);
 
+  analyser.getByteFrequencyData(dataArray);
   console.log("renderFrame");
-  console.log(scriptNode);
+  console.log(dataArray);
   // // clear the canvas
   // ctx.fillStyle = "#000";
   // ctx.fillRect(0, 0, canvas.width, canvas.height);
