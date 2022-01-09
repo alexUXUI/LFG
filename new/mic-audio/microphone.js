@@ -65,24 +65,22 @@ export function handleMicStop() {
   }
 }
 
-export function initMic() {
-  // create a button to start the mic and append it to a div with id of "mic"
-  const micButton = document.createElement("button");
-  micButton.setAttribute("id", "micStart");
-  micButton.innerText = "Start Mic";
-  micButton.addEventListener("click", startMic);
+// create a button to start the mic and append it to a div with id of "mic"
+const micButton = document.createElement("button");
+micButton.setAttribute("id", "micStart");
+micButton.innerText = "Start Mic";
+micButton.addEventListener("click", startMic);
 
-  // append button to div of id "mic"
-  const mic = document.getElementById("mic");
-  mic.appendChild(micButton);
+// append button to div of id "mic"
+const mic = document.getElementById("mic");
+mic.appendChild(micButton);
 
-  // create a button to stop the mic and append it to the DOM
-  const stopMicButton = document.createElement("button");
-  stopMicButton.setAttribute("id", "micStop");
-  stopMicButton.innerText = "Stop Mic";
-  stopMicButton.addEventListener("click", handleMicStop);
-  stopMicButton.disabled = true;
-  mic.appendChild(stopMicButton);
-}
+// create a button to stop the mic and append it to the DOM
+const stopMicButton = document.createElement("button");
+stopMicButton.setAttribute("id", "micStop");
+stopMicButton.innerText = "Stop Mic";
+stopMicButton.addEventListener("click", handleMicStop);
+stopMicButton.disabled = true;
+mic.appendChild(stopMicButton);
 
 export { analyser, bufferLength, dataArray };
